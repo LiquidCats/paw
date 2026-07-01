@@ -12,7 +12,7 @@ Graceful is a lightweight Go package that provides utilities for managing gracef
 Use `go get` to install the package:
 
 ```bash
-go get github.com/LiquidCats/graceful
+go get github.com/LiquidCats/paw/lib/graceful
 ```
 
 ## Usage Example
@@ -27,7 +27,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/LiquidCats/graceful"
+	"github.com/LiquidCats/paw/lib/graceful"
 )
 
 func main() {

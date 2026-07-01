@@ -4,10 +4,10 @@ import (
 	"context"
 	"time"
 
-	"github.com/LiquidCats/paw/rater/configs"
-	"github.com/LiquidCats/paw/rater/internal/app/domain/entity"
-	"github.com/LiquidCats/paw/rater/internal/app/port/adapter/repository"
-	"github.com/LiquidCats/paw/rater/internal/app/usecase"
+	"github.com/LiquidCats/paw/services/rater/configs"
+	"github.com/LiquidCats/paw/services/rater/internal/app/domain/entity"
+	"github.com/LiquidCats/paw/services/rater/internal/app/port/adapter/repository"
+	"github.com/LiquidCats/paw/services/rater/internal/app/usecase"
 	"github.com/rotisserie/eris"
 	"github.com/rs/zerolog"
 )

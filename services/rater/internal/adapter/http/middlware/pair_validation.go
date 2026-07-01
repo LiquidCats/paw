@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/LiquidCats/paw/rater/internal/adapter/http/dto"
-	"github.com/LiquidCats/paw/rater/internal/app/port/adapter/repository"
+	"github.com/LiquidCats/paw/services/rater/internal/adapter/http/dto"
+	"github.com/LiquidCats/paw/services/rater/internal/app/port/adapter/repository"
 	"github.com/gin-gonic/gin"
 )
 

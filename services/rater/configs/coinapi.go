@@ -1,7 +1,7 @@
 package configs
 
 import (
-	"github.com/LiquidCats/paw/rater/pkg/docker"
+	"github.com/LiquidCats/paw/services/rater/pkg/docker"
 	"github.com/go-playground/sensitive"
 	"github.com/rotisserie/eris"
 )

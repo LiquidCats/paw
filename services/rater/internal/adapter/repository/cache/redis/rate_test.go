@@ -3,8 +3,8 @@ package redis_test
 import (
 	"testing"
 
-	"github.com/LiquidCats/paw/rater/configs"
-	"github.com/LiquidCats/paw/rater/internal/adapter/repository/cache/redis"
+	"github.com/LiquidCats/paw/services/rater/configs"
+	"github.com/LiquidCats/paw/services/rater/internal/adapter/repository/cache/redis"
 	"github.com/alicebob/miniredis/v2"
 	"github.com/shopspring/decimal"
 	"github.com/stretchr/testify/require"

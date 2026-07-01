@@ -4,8 +4,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/LiquidCats/paw/rater/configs"
-	"github.com/LiquidCats/paw/rater/internal/app/domain/entity"
+	"github.com/LiquidCats/paw/services/rater/configs"
+	"github.com/LiquidCats/paw/services/rater/internal/app/domain/entity"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 )

@@ -3,10 +3,10 @@ package service_test
 import (
 	"testing"
 
-	"github.com/LiquidCats/paw/rater/internal/adapter/repository/cache/redis"
-	"github.com/LiquidCats/paw/rater/internal/app/domain/entity"
-	"github.com/LiquidCats/paw/rater/internal/app/service"
-	"github.com/LiquidCats/paw/rater/test/mocks"
+	"github.com/LiquidCats/paw/services/rater/internal/adapter/repository/cache/redis"
+	"github.com/LiquidCats/paw/services/rater/internal/app/domain/entity"
+	"github.com/LiquidCats/paw/services/rater/internal/app/service"
+	"github.com/LiquidCats/paw/services/rater/test/mocks"
 	"github.com/shopspring/decimal"
 	"github.com/stretchr/testify/require"
 )

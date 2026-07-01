@@ -3,7 +3,7 @@ package configs
 import (
 	"fmt"
 
-	"github.com/LiquidCats/paw/rater/pkg/docker"
+	"github.com/LiquidCats/paw/services/rater/pkg/docker"
 )
 
 type DB struct {

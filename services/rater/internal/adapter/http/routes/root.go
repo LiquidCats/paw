@@ -3,7 +3,7 @@ package routes
 import (
 	"net/http"
 
-	"github.com/LiquidCats/paw/rater/internal/adapter/http/dto"
+	"github.com/LiquidCats/paw/services/rater/internal/adapter/http/dto"
 	"github.com/gin-gonic/gin"
 )
 

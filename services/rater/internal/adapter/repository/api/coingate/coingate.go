@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/LiquidCats/paw/rater/configs"
-	"github.com/LiquidCats/paw/rater/internal/app/domain/entity"
-	"github.com/LiquidCats/paw/rater/internal/app/domain/errors"
+	"github.com/LiquidCats/paw/services/rater/configs"
+	"github.com/LiquidCats/paw/services/rater/internal/app/domain/entity"
+	"github.com/LiquidCats/paw/services/rater/internal/app/domain/errors"
 	"github.com/rotisserie/eris"
 	"github.com/shopspring/decimal"
 )

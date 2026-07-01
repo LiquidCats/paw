@@ -3,7 +3,7 @@ package metrics
 import (
 	"time"
 
-	"github.com/LiquidCats/paw/rater/internal/app/domain/entity"
+	"github.com/LiquidCats/paw/services/rater/internal/app/domain/entity"
 )
 
 type ProviderErrRateMetric interface {

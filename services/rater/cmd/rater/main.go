@@ -5,17 +5,17 @@ import (
 	"os"
 
 	"github.com/LiquidCats/paw/lib/graceful"
-	"github.com/LiquidCats/paw/rater/configs"
-	"github.com/LiquidCats/paw/rater/internal/adapter/http"
-	"github.com/LiquidCats/paw/rater/internal/adapter/http/middlware"
-	"github.com/LiquidCats/paw/rater/internal/adapter/http/routes"
-	"github.com/LiquidCats/paw/rater/internal/adapter/metrics/prometheus"
-	"github.com/LiquidCats/paw/rater/internal/adapter/repository/cache/redis"
-	"github.com/LiquidCats/paw/rater/internal/adapter/repository/database/postgres"
-	"github.com/LiquidCats/paw/rater/internal/adapter/scheduler/cron"
-	"github.com/LiquidCats/paw/rater/internal/app/bootstrap"
-	"github.com/LiquidCats/paw/rater/internal/app/service"
-	"github.com/LiquidCats/paw/rater/internal/app/usecase"
+	"github.com/LiquidCats/paw/services/rater/configs"
+	"github.com/LiquidCats/paw/services/rater/internal/adapter/http"
+	"github.com/LiquidCats/paw/services/rater/internal/adapter/http/middlware"
+	"github.com/LiquidCats/paw/services/rater/internal/adapter/http/routes"
+	"github.com/LiquidCats/paw/services/rater/internal/adapter/metrics/prometheus"
+	"github.com/LiquidCats/paw/services/rater/internal/adapter/repository/cache/redis"
+	"github.com/LiquidCats/paw/services/rater/internal/adapter/repository/database/postgres"
+	"github.com/LiquidCats/paw/services/rater/internal/adapter/scheduler/cron"
+	"github.com/LiquidCats/paw/services/rater/internal/app/bootstrap"
+	"github.com/LiquidCats/paw/services/rater/internal/app/service"
+	"github.com/LiquidCats/paw/services/rater/internal/app/usecase"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/rotisserie/eris"
 	"github.com/rs/zerolog"
@@ -117,11 +117,9 @@ func main() { //nolint:funlen
 
 	runners := []graceful.Runner{
 		graceful.Signals,
-		graceful.ScheduleRunner(
-			collectRateTask,
-		),
-		graceful.ServerRunner(router, cfg.HTTP),
-		graceful.ServerRunner(prometheus.GinHandler(), cfg.Metrics),
+		graceful.ScheduleRunner(collectRateTask),
+		graceful.Server(router, graceful.WithPort("8080")),
+		graceful.Server(prometheus.GinHandler(), graceful.WithPort("9100")),
 	}
 
 	if err = graceful.WaitContext(

@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/LiquidCats/paw/rater/configs"
+	"github.com/LiquidCats/paw/services/rater/configs"
 	"github.com/bytedance/sonic"
 	"github.com/go-redis/cache/v9"
 	"github.com/redis/go-redis/v9"

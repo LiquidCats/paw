@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/LiquidCats/paw/rater/pkg/docker"
+	"github.com/LiquidCats/paw/services/rater/pkg/docker"
 	"github.com/rotisserie/eris"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/LiquidCats/paw/rater/internal/app/utils/timeutils"
+	"github.com/LiquidCats/paw/services/rater/internal/app/utils/timeutils"
 )
 
 func TestRoundToNearest(t *testing.T) {

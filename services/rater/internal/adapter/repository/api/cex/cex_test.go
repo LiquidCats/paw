@@ -6,10 +6,10 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/LiquidCats/paw/rater/configs"
-	"github.com/LiquidCats/paw/rater/internal/adapter/repository/api/cex"
-	"github.com/LiquidCats/paw/rater/internal/adapter/repository/api/cex/data"
-	"github.com/LiquidCats/paw/rater/internal/app/domain/entity"
+	"github.com/LiquidCats/paw/services/rater/configs"
+	"github.com/LiquidCats/paw/services/rater/internal/adapter/repository/api/cex"
+	"github.com/LiquidCats/paw/services/rater/internal/adapter/repository/api/cex/data"
+	"github.com/LiquidCats/paw/services/rater/internal/app/domain/entity"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/stretchr/testify/require"

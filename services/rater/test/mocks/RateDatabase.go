@@ -7,7 +7,7 @@ package mocks
 import (
 	"context"
 
-	"github.com/LiquidCats/paw/rater/internal/adapter/repository/database/postgres"
+	"github.com/LiquidCats/paw/services/rater/internal/adapter/repository/database/postgres"
 	mock "github.com/stretchr/testify/mock"
 )
 

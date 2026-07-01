@@ -1,6 +1,6 @@
 package bootstrap
 
-import "github.com/LiquidCats/paw/rater/internal/app/domain/entity"
+import "github.com/LiquidCats/paw/services/rater/internal/app/domain/entity"
 
 type PairRegistry interface {
 	GetPair(symbol entity.Symbol) (entity.Pair, bool)

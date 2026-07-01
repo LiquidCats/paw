@@ -1,14 +1,14 @@
 package api
 
 import (
-	"github.com/LiquidCats/paw/rater/configs"
-	"github.com/LiquidCats/paw/rater/internal/adapter/repository/api/cex"
-	"github.com/LiquidCats/paw/rater/internal/adapter/repository/api/coinapi"
-	"github.com/LiquidCats/paw/rater/internal/adapter/repository/api/coingate"
-	"github.com/LiquidCats/paw/rater/internal/adapter/repository/api/coingecko"
-	"github.com/LiquidCats/paw/rater/internal/adapter/repository/api/coinmarketcap"
-	"github.com/LiquidCats/paw/rater/internal/app/domain/entity"
-	"github.com/LiquidCats/paw/rater/internal/app/port/adapter/repository"
+	"github.com/LiquidCats/paw/services/rater/configs"
+	"github.com/LiquidCats/paw/services/rater/internal/adapter/repository/api/cex"
+	"github.com/LiquidCats/paw/services/rater/internal/adapter/repository/api/coinapi"
+	"github.com/LiquidCats/paw/services/rater/internal/adapter/repository/api/coingate"
+	"github.com/LiquidCats/paw/services/rater/internal/adapter/repository/api/coingecko"
+	"github.com/LiquidCats/paw/services/rater/internal/adapter/repository/api/coinmarketcap"
+	"github.com/LiquidCats/paw/services/rater/internal/app/domain/entity"
+	"github.com/LiquidCats/paw/services/rater/internal/app/port/adapter/repository"
 )
 
 func ProviderFactory(cfg configs.Config, provider entity.ProviderName) repository.RateAPI {

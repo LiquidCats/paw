@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/LiquidCats/paw/rater/internal/adapter/http/middlware"
-	"github.com/LiquidCats/paw/rater/internal/app/domain/entity"
+	"github.com/LiquidCats/paw/services/rater/internal/adapter/http/middlware"
+	"github.com/LiquidCats/paw/services/rater/internal/app/domain/entity"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

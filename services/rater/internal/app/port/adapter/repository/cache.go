@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 
-	"github.com/LiquidCats/paw/rater/internal/adapter/repository/cache/redis"
+	"github.com/LiquidCats/paw/services/rater/internal/adapter/repository/cache/redis"
 )
 
 type RateCache interface {

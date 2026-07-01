@@ -5,8 +5,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	http2 "github.com/LiquidCats/paw/rater/internal/adapter/http"
-	"github.com/LiquidCats/paw/rater/internal/adapter/http/routes"
+	http2 "github.com/LiquidCats/paw/services/rater/internal/adapter/http"
+	"github.com/LiquidCats/paw/services/rater/internal/adapter/http/routes"
 	"github.com/stretchr/testify/assert"
 )
 

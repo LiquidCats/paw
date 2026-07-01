@@ -5,10 +5,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/LiquidCats/paw/rater/internal/adapter/http/dto"
-	"github.com/LiquidCats/paw/rater/internal/app/domain/entity"
-	"github.com/LiquidCats/paw/rater/internal/app/port/adapter/metrics"
-	"github.com/LiquidCats/paw/rater/internal/app/usecase"
+	"github.com/LiquidCats/paw/services/rater/internal/adapter/http/dto"
+	"github.com/LiquidCats/paw/services/rater/internal/app/domain/entity"
+	"github.com/LiquidCats/paw/services/rater/internal/app/port/adapter/metrics"
+	"github.com/LiquidCats/paw/services/rater/internal/app/usecase"
 	"github.com/rotisserie/eris"
 	"github.com/rs/zerolog"
 

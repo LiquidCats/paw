@@ -5,9 +5,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/LiquidCats/paw/rater/internal/adapter/http/dto"
-	"github.com/LiquidCats/paw/rater/internal/app/domain/entity"
-	"github.com/LiquidCats/paw/rater/internal/app/utils/timeutils"
+	"github.com/LiquidCats/paw/services/rater/internal/adapter/http/dto"
+	"github.com/LiquidCats/paw/services/rater/internal/app/domain/entity"
+	"github.com/LiquidCats/paw/services/rater/internal/app/utils/timeutils"
 	"github.com/gin-gonic/gin"
 )
 

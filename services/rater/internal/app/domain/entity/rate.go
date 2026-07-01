@@ -1,7 +1,7 @@
 package entity
 
 import (
-	"github.com/LiquidCats/paw/rater/internal/adapter/repository/database/postgres"
+	"github.com/LiquidCats/paw/services/rater/internal/adapter/repository/database/postgres"
 	"github.com/shopspring/decimal"
 )
 

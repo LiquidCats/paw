@@ -1,4 +1,4 @@
-module github.com/LiquidCats/paw/rater
+module github.com/LiquidCats/paw/services/rater
 
 go 1.26.0
 

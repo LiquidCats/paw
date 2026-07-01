@@ -1,15 +1,9 @@
 package configs
 
-import (
-	"github.com/LiquidCats/paw/lib/graceful"
-)
-
 type Config struct {
-	App     AppConfig           `yaml:"app" envconfig:"APP"`
-	Redis   RedisConfig         `yaml:"redis" envconfig:"REDIS"`
-	HTTP    graceful.HttpConfig `yaml:"http" envconfig:"HTTP"`
-	Metrics graceful.HttpConfig `yaml:"metrics" envconfig:"METRICS"`
-	DB      DB                  `yaml:"db" envconfig:"DB"`
+	App   AppConfig   `yaml:"app" envconfig:"APP"`
+	Redis RedisConfig `yaml:"redis" envconfig:"REDIS"`
+	DB    DB          `yaml:"db" envconfig:"DB"`
 
 	CoinGate      CoinGateConfig      `yaml:"coingate" envconfig:"COIN_GATE"`
 	Cex           CexConfig           `yaml:"cex" envconfig:"CEX"`

@@ -6,11 +6,11 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	http2 "github.com/LiquidCats/paw/rater/internal/adapter/http"
-	"github.com/LiquidCats/paw/rater/internal/adapter/http/middlware"
-	"github.com/LiquidCats/paw/rater/internal/app/domain/entity"
-	"github.com/LiquidCats/paw/rater/internal/app/port/adapter/repository"
-	"github.com/LiquidCats/paw/rater/test/mocks"
+	http2 "github.com/LiquidCats/paw/services/rater/internal/adapter/http"
+	"github.com/LiquidCats/paw/services/rater/internal/adapter/http/middlware"
+	"github.com/LiquidCats/paw/services/rater/internal/app/domain/entity"
+	"github.com/LiquidCats/paw/services/rater/internal/app/port/adapter/repository"
+	"github.com/LiquidCats/paw/services/rater/test/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )

@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/LiquidCats/paw/rater/configs"
+	"github.com/LiquidCats/paw/services/rater/configs"
 	"github.com/go-playground/sensitive"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

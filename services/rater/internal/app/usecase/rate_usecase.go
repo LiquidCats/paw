@@ -4,9 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/LiquidCats/paw/rater/internal/app/domain/entity"
-	"github.com/LiquidCats/paw/rater/internal/app/port/service"
-	"github.com/LiquidCats/paw/rater/internal/app/utils/timeutils"
+	"github.com/LiquidCats/paw/services/rater/internal/app/domain/entity"
+	"github.com/LiquidCats/paw/services/rater/internal/app/port/service"
+	"github.com/LiquidCats/paw/services/rater/internal/app/utils/timeutils"
 	"github.com/rotisserie/eris"
 	"github.com/rs/zerolog"
 )

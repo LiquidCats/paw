@@ -1,0 +1,85 @@
+x-app-env: &app-env
+  GOMAXPROCS: 1
+  WATCHER_APP_LOG_LEVEL: debug
+
+  WATCHER_METRICS_PORT: 9090
+
+  WATCHER_DB_HOST: postgres
+  WATCHER_DB_PORT: 5432
+  WATCHER_DB_USER: watcher_db_user
+  WATCHER_DB_PASSWORD: watcher_db_secret
+  WATCHER_DB_DATABASE: watcher_db
+
+  WATCHER_REDIS_HOST: redis
+  WATCHER_REDIS_PORT: 6379
+  WATCHER_REDIS_DB: 0
+
+services:
+  watcher:
+    build:
+      dockerfile: Dockerfile.dev
+      context: .
+    working_dir: /app
+    environment:
+      <<: *app-env
+    volumes:
+      - .:/app
+      - godeps:/go
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: watcher_db_user
+      POSTGRES_PASSWORD: watcher_db_secret
+      POSTGRES_DB: watcher_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:8-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  btc:
+    user: 1000:1000
+    image: lncm/bitcoind:v28.0
+    command:
+      - "-disablewallet=1"
+      - "-prune=550"
+      - "-maxuploadtarget=1440M"
+      - "-testnet4=1"
+      - "-rpcuser=btc"
+      - "-rpcpassword=password"
+      - "-rpcbind=0.0.0.0"
+      - "-rpcallowip=0.0.0.0/0"
+      - "-rpcport=8332"
+    ports:
+      - "8332:8332"
+    volumes:
+      - btc:/data/.bitcoin
+    restart: on-failure
+    stop_grace_period: 15m30s
+
+  eth:
+    image: ghcr.io/liquidcats/eth-helios-docker:latest
+    volumes:
+      - ./api_key.secret:/run/secrets/api_key
+      - eth:/root/.helios
+    ports:
+      - "8545:8545"
+    restart: on-failure
+
+volumes:
+  btc:
+  eth:
+  postgres_data:
+  redis_data:
+  godeps:
+    external: true

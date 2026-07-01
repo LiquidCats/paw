@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package services.litehsm.v1;
 
-option go_package = "github.com/LiquidCats/protos/gen/go/services/litehsm/v1";
+option go_package = "github.com/LiquidCats/paw/protos/gen/go/services/litehsm/v1";
 
 enum Curve {
     CURVE_UNSPECIFIED = 0;

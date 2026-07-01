@@ -620,7 +620,7 @@ const file_services_litehsm_v1_key_manager_service_proto_rawDesc = "" +
 	"\tEnableKey\x12%.services.litehsm.v1.EnableKeyRequest\x1a&.services.litehsm.v1.EnableKeyResponse\x12]\n" +
 	"\n" +
 	"DisableKey\x12&.services.litehsm.v1.DisableKeyRequest\x1a'.services.litehsm.v1.DisableKeyResponse\x12Z\n" +
-	"\tDeleteKey\x12%.services.litehsm.v1.DeleteKeyRequest\x1a&.services.litehsm.v1.DeleteKeyResponseB9Z7github.com/LiquidCats/protos/gen/go/services/litehsm/v1b\x06proto3"
+	"\tDeleteKey\x12%.services.litehsm.v1.DeleteKeyRequest\x1a&.services.litehsm.v1.DeleteKeyResponseB=Z;github.com/LiquidCats/paw/protos/gen/go/services/litehsm/v1b\x06proto3"
 
 var (
 	file_services_litehsm_v1_key_manager_service_proto_rawDescOnce sync.Once

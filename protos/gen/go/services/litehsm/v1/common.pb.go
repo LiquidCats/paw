@@ -180,7 +180,7 @@ const file_services_litehsm_v1_common_proto_rawDesc = "" +
 	"\x16KEY_STATUS_UNSPECIFIED\x10\x00\x12\x16\n" +
 	"\x12KEY_STATUS_ENABLED\x10\x01\x12\x17\n" +
 	"\x13KEY_STATUS_DISABLED\x10\x02\x12\x16\n" +
-	"\x12KEY_STATUS_DELETED\x10\x03B9Z7github.com/LiquidCats/protos/gen/go/services/litehsm/v1b\x06proto3"
+	"\x12KEY_STATUS_DELETED\x10\x03B=Z;github.com/LiquidCats/paw/protos/gen/go/services/litehsm/v1b\x06proto3"
 
 var (
 	file_services_litehsm_v1_common_proto_rawDescOnce sync.Once

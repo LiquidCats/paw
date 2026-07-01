@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package services.litehsm.v1;
 
-option go_package = "github.com/LiquidCats/protos/gen/go/services/litehsm/v1";
+option go_package = "github.com/LiquidCats/paw/protos/gen/go/services/litehsm/v1";
 
 import "google/protobuf/timestamp.proto";
 import "services/litehsm/v1/common.proto";

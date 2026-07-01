@@ -1,0 +1,73 @@
+x-app-env: &app-env
+  RATER_APP_LOG_LEVEL: debug
+  RATER_HTTP_PORT: 8080
+
+  RATER_METRICS_PORT: 9090
+
+  RATER_COIN_GATE_URL: "https://api.coingate.com/v2/rates/merchant"
+
+  RATER_CEX_URL: "https://trade.cex.io/api/spot/rest-public/get_ticker"
+
+  RATER_COIN_API_URL: "https://rest.coinapi.io/v1/exchangerate"
+  RATER_COIN_API_SECRET: "***REMOVED***"
+
+  RATER_COIN_MARKET_CAP_URL: "https://pro-api.coinmarketcap.com/v1/tools/price-conversion"
+  RATER_COIN_MARKET_CAP_SECRET: "***REMOVED***"
+
+  RATER_COIN_GECKO_URL: "https://api.coingecko.com/api/v3/simple/price"
+
+  RATER_REDIS_ADDRESS: "cache:6379"
+  RATER_REDIS_DB: 0
+
+  RATER_DB_HOST: db
+  RATER_DB_PORT: 5432
+  RATER_DB_USER: rater_db_user
+  RATER_DB_PASSWORD: rater_db_secret
+  RATER_DB_DATABASE: rater_db
+
+services:
+  rater:
+    build:
+      dockerfile: Dockerfile.dev
+      context: .
+    working_dir: /app
+    environment:
+      <<: *app-env
+    networks:
+      - rater
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+      - godeps:/go
+    depends_on:
+      - cache
+      - db
+
+  cache:
+    image: redis:8-alpine
+    networks:
+      - rater
+    ports:
+      - "6379:6379"
+
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: rater_db_user
+      POSTGRES_PASSWORD: rater_db_secret
+      POSTGRES_DB: rater_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - rater
+    ports:
+      - "5432:5432"
+
+networks:
+  rater:
+
+volumes:
+  postgres_data:
+  godeps:
+    external: true

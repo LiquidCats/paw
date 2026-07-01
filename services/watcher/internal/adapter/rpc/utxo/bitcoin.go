@@ -4,9 +4,9 @@ import (
 	"context"
 
 	"github.com/LiquidCats/paw/lib/jsonrpc"
-	"github.com/LiquidCats/paw/watcher/configs"
-	"github.com/LiquidCats/paw/watcher/internal/adapter/rpc/utxo/data"
-	"github.com/LiquidCats/paw/watcher/internal/app/domain/entities"
+	"github.com/LiquidCats/paw/services/watcher/configs"
+	"github.com/LiquidCats/paw/services/watcher/internal/adapter/rpc/utxo/data"
+	"github.com/LiquidCats/paw/services/watcher/internal/app/domain/entities"
 	"github.com/rotisserie/eris"
 )
 

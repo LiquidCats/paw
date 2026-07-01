@@ -3,7 +3,7 @@ package contracts
 import (
 	"context"
 
-	"github.com/LiquidCats/paw/watcher/internal/app/domain/entities"
+	"github.com/LiquidCats/paw/services/watcher/internal/app/domain/entities"
 )
 
 type Getter interface {

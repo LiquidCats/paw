@@ -4,7 +4,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/LiquidCats/paw/watcher/internal/adapter/state"
+	"github.com/LiquidCats/paw/services/watcher/internal/adapter/state"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

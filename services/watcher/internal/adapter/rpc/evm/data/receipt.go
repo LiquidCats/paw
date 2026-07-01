@@ -1,8 +1,8 @@
 package data
 
 import (
-	"github.com/LiquidCats/paw/watcher/internal/adapter/rpc/evm/data/common"
-	"github.com/LiquidCats/paw/watcher/internal/app/domain/entities"
+	"github.com/LiquidCats/paw/services/watcher/internal/adapter/rpc/evm/data/common"
+	"github.com/LiquidCats/paw/services/watcher/internal/app/domain/entities"
 )
 
 type TransactionReceipts []TransactionReceipt

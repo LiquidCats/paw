@@ -3,10 +3,10 @@ package usecase
 import (
 	"context"
 
-	"github.com/LiquidCats/paw/watcher/configs"
-	"github.com/LiquidCats/paw/watcher/internal/app/domain/entities"
-	"github.com/LiquidCats/paw/watcher/internal/app/port/database"
-	"github.com/LiquidCats/paw/watcher/internal/app/port/state"
+	"github.com/LiquidCats/paw/services/watcher/configs"
+	"github.com/LiquidCats/paw/services/watcher/internal/app/domain/entities"
+	"github.com/LiquidCats/paw/services/watcher/internal/app/port/database"
+	"github.com/LiquidCats/paw/services/watcher/internal/app/port/state"
 	"github.com/rotisserie/eris"
 )
 

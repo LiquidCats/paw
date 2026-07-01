@@ -5,11 +5,11 @@ import (
 	"math/big"
 
 	"github.com/LiquidCats/paw/lib/jsonrpc"
-	"github.com/LiquidCats/paw/watcher/configs"
-	"github.com/LiquidCats/paw/watcher/internal/adapter/rpc/evm/data"
-	"github.com/LiquidCats/paw/watcher/internal/app/domain/entities"
-	"github.com/LiquidCats/paw/watcher/internal/app/domain/errors"
-	"github.com/LiquidCats/paw/watcher/internal/app/port/contracts"
+	"github.com/LiquidCats/paw/services/watcher/configs"
+	"github.com/LiquidCats/paw/services/watcher/internal/adapter/rpc/evm/data"
+	"github.com/LiquidCats/paw/services/watcher/internal/app/domain/entities"
+	"github.com/LiquidCats/paw/services/watcher/internal/app/domain/errors"
+	"github.com/LiquidCats/paw/services/watcher/internal/app/port/contracts"
 	"github.com/rotisserie/eris"
 	"github.com/rs/zerolog"
 )

@@ -4,8 +4,8 @@ import (
 	"math/big"
 	"testing"
 
-	data2 "github.com/LiquidCats/paw/watcher/internal/adapter/rpc/evm/data"
-	"github.com/LiquidCats/paw/watcher/internal/adapter/rpc/evm/data/common"
+	data2 "github.com/LiquidCats/paw/services/watcher/internal/adapter/rpc/evm/data"
+	"github.com/LiquidCats/paw/services/watcher/internal/adapter/rpc/evm/data/common"
 	"github.com/shopspring/decimal"
 	"github.com/stretchr/testify/assert"
 )

@@ -6,11 +6,11 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/LiquidCats/paw/watcher/configs"
-	"github.com/LiquidCats/paw/watcher/internal/adapter/rpc/utxo"
-	"github.com/LiquidCats/paw/watcher/internal/app/domain/entities"
-	"github.com/LiquidCats/paw/watcher/test/fixtures"
-	"github.com/LiquidCats/paw/watcher/test/server"
+	"github.com/LiquidCats/paw/services/watcher/configs"
+	"github.com/LiquidCats/paw/services/watcher/internal/adapter/rpc/utxo"
+	"github.com/LiquidCats/paw/services/watcher/internal/app/domain/entities"
+	"github.com/LiquidCats/paw/services/watcher/test/fixtures"
+	"github.com/LiquidCats/paw/services/watcher/test/server"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

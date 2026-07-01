@@ -1,4 +1,4 @@
-module github.com/LiquidCats/paw/watcher
+module github.com/LiquidCats/paw/services/watcher
 
 go 1.26.1
 

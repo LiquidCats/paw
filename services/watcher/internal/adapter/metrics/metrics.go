@@ -1,7 +1,7 @@
 package metrics
 
 import (
-	"github.com/LiquidCats/paw/watcher/internal/app/domain/entities"
+	"github.com/LiquidCats/paw/services/watcher/internal/app/domain/entities"
 	"github.com/prometheus/client_golang/prometheus"
 )
 

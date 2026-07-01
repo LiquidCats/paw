@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/LiquidCats/paw/watcher/internal/adapter/state"
+	"github.com/LiquidCats/paw/services/watcher/internal/adapter/state"
 )
 
 func BenchmarkMapState_Set(b *testing.B) {

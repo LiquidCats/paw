@@ -3,7 +3,7 @@ package common_test
 import (
 	"testing"
 
-	"github.com/LiquidCats/paw/watcher/internal/adapter/rpc/evm/data/common"
+	"github.com/LiquidCats/paw/services/watcher/internal/adapter/rpc/evm/data/common"
 	"github.com/go-playground/assert/v2"
 )
 

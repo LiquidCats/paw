@@ -5,7 +5,7 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/LiquidCats/paw/watcher/internal/adapter/rpc/evm/data/common"
+	"github.com/LiquidCats/paw/services/watcher/internal/adapter/rpc/evm/data/common"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

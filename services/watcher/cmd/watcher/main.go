@@ -4,9 +4,9 @@ import (
 	"context"
 	"os"
 
-	"github.com/LiquidCats/paw/watcher/configs"
-	"github.com/LiquidCats/paw/watcher/internal/adapter/database"
-	"github.com/LiquidCats/paw/watcher/internal/app"
+	"github.com/LiquidCats/paw/services/watcher/configs"
+	"github.com/LiquidCats/paw/services/watcher/internal/adapter/database"
+	"github.com/LiquidCats/paw/services/watcher/internal/app"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/rs/zerolog"
 

@@ -6,7 +6,7 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/LiquidCats/paw/watcher/internal/adapter/rpc/evm/parser"
+	"github.com/LiquidCats/paw/services/watcher/internal/adapter/rpc/evm/parser"
 )
 
 func TestParse(t *testing.T) {

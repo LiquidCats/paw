@@ -1,7 +1,7 @@
 package router
 
 import (
-	"github.com/LiquidCats/paw/watcher/internal/app/port"
+	"github.com/LiquidCats/paw/services/watcher/internal/app/port"
 	"github.com/gin-contrib/logger"
 	"github.com/gin-contrib/requestid"
 	"github.com/gin-gonic/gin"

@@ -3,7 +3,7 @@ package evm
 import (
 	"math/big"
 
-	"github.com/LiquidCats/paw/watcher/internal/adapter/rpc/evm/data"
+	"github.com/LiquidCats/paw/services/watcher/internal/adapter/rpc/evm/data"
 	"github.com/shopspring/decimal"
 )
 

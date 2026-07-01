@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package services.litehsm.v1;
+
+option go_package = "github.com/LiquidCats/protos/gen/go/services/litehsm/v1";
+
+enum Curve {
+    CURVE_UNSPECIFIED = 0;
+    CURVE_SECP256K1 = 1;
+}
+
+enum Algorithm {
+    ALGORITHM_UNSPECIFIED = 0;
+    ALGORITHM_ECDSA = 1;
+}
+
+enum KeyStatus {
+    KEY_STATUS_UNSPECIFIED = 0;
+    KEY_STATUS_ENABLED = 1;
+    KEY_STATUS_DISABLED = 2;
+    KEY_STATUS_DELETED = 3;
+}

@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package services.litehsm.v1;
+
+option go_package = "github.com/LiquidCats/protos/gen/go/services/litehsm/v1";
+
+import "google/protobuf/timestamp.proto";
+import "services/litehsm/v1/common.proto";
+
+
+service KeyManagerService {
+    rpc CreateKey(CreateKeyRequest) returns (CreateKeyResponse);
+    rpc SetKeyExpiration(SetKeyExpirationRequest) returns (SetKeyExpirationResponse);
+    rpc EnableKey(EnableKeyRequest) returns (EnableKeyResponse);
+    rpc DisableKey(DisableKeyRequest) returns (DisableKeyResponse);
+    rpc DeleteKey(DeleteKeyRequest) returns (DeleteKeyResponse);
+}
+
+message EnableKeyRequest {
+    string key_id = 1;
+}
+
+message EnableKeyResponse {
+    string key_id = 1;
+    KeyStatus status = 2;
+}
+
+message DisableKeyRequest {
+    string key_id = 1;
+}
+
+message DisableKeyResponse {
+    string key_id = 1;
+    KeyStatus status = 2;
+}
+
+message DeleteKeyRequest {
+    string key_id = 1;
+}
+
+message DeleteKeyResponse {
+    string key_id = 1;
+    KeyStatus status = 2;
+}
+
+message SetKeyExpirationRequest {
+    string key_id = 1;
+    google.protobuf.Timestamp expiration = 2;
+}
+
+message SetKeyExpirationResponse {
+    string key_id = 1;
+    google.protobuf.Timestamp expiration = 2;
+}
+
+message CreateKeyRequest {
+    string alias = 1;
+    Curve curve = 2;
+    Algorithm algorithm = 3;
+    optional google.protobuf.Timestamp expiration = 4;
+}
+
+message CreateKeyResponse {
+    string key_id = 1;
+    string alias = 2;
+    Curve curve = 3;
+    Algorithm algorithm = 4;
+    KeyStatus status = 5;
+    optional google.protobuf.Timestamp expiration = 6;
+}

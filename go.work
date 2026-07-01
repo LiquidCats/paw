@@ -1,0 +1,9 @@
+go 1.26.4
+
+use (
+	./protos
+	./lib/graceful
+	./lib/observer
+	./lib/workers
+	./lib/jsonrpc
+)

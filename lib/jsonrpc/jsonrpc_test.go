@@ -83,7 +83,7 @@ func TestPrepareAndExecuteSuccess(t *testing.T) {
 	}))
 	defer server.Close()
 
-	ctx := context.WithValue(context.Background(), "trace", "abc123")
+	ctx := context.WithValue(context.Background(), "trace", "abc123") //nolint:staticcheck
 
 	prepared := req.Prepare(
 		server.URL,
@@ -129,7 +129,8 @@ func TestExecuteRPCError(t *testing.T) {
 
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		fmt.Fprint(w, `{"jsonrpc":"2.0","error":{"code":-32000,"message":"boom"},"id":"rpc-err"}`)
+		_, err := fmt.Fprint(w, `{"jsonrpc":"2.0","error":{"code":-32000,"message":"boom"},"id":"rpc-err"}`)
+		require.NoError(t, err)
 	}))
 	defer server.Close()
 
@@ -155,7 +156,8 @@ func TestExecuteDecodeError(t *testing.T) {
 
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		fmt.Fprint(w, "{not-json")
+		_, err := fmt.Fprint(w, "{not-json")
+		require.NoError(t, err)
 	}))
 	defer server.Close()
 
@@ -195,14 +197,15 @@ func TestExecuteCanceledContext(t *testing.T) {
 func TestExecuteClientOptions(t *testing.T) {
 	t.Parallel()
 
-	req := jsonrpc.NewRequest[struct{}, string](
+	req := jsonrpc.NewRequest(
 		"opt",
 		struct{}{},
 		jsonrpc.WithRPCid[struct{}, string]("opt-1"),
 	)
 
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, `{"jsonrpc":"2.0","result":"","id":"opt-1"}`)
+		_, err := fmt.Fprint(w, `{"jsonrpc":"2.0","result":"","id":"opt-1"}`)
+		require.NoError(t, err)
 	}))
 	defer server.Close()
 

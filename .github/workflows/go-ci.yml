@@ -115,30 +115,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Select golangci-lint version
-        id: golangci
-        run: |
-          case "${{ matrix.module }}" in
-            lib/workers)
-              version="v2.5.0"
-              ;;
-            services/rater)
-              version="v2.10.1"
-              ;;
-            services/watcher)
-              version="v2.11.1"
-              ;;
-            *)
-              version="v2.11.4"
-              ;;
-          esac
-          echo "version=${version}" >> "${GITHUB_OUTPUT}"
-
       - name: Run golangci-lint
         run: |
           docker run --rm \
             -e GOWORK=/src/go.work \
             -v "${GITHUB_WORKSPACE}:/src" \
             -w "/src/${{ matrix.module }}" \
-            "golangci/golangci-lint:${{ steps.golangci.outputs.version }}-alpine" \
+            "golangci/golangci-lint:v2.11.4-alpine" \
             golangci-lint run ./...

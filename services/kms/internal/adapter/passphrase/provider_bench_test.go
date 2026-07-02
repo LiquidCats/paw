@@ -88,12 +88,16 @@ func BenchmarkStdInPassphraseProvider_Get_NonTerminalStdin(b *testing.B) {
 	if err != nil {
 		b.Fatalf("Open(os.DevNull) for stdin error = %v", err)
 	}
-	defer stdin.Close()
+	defer func() {
+		_ = stdin.Close()
+	}()
 
 	stdout, err := os.OpenFile(os.DevNull, os.O_WRONLY, 0)
 	require.NoError(b, err)
 
-	defer stdout.Close()
+	defer func() {
+		_ = stdout.Close()
+	}()
 
 	os.Stdin = stdin   //nolint:reassign
 	os.Stdout = stdout //nolint:reassign

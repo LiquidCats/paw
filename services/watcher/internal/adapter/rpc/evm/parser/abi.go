@@ -37,16 +37,6 @@ func readUint64Word(raw []byte, offset int) (uint64, error) {
 	return binary.BigEndian.Uint64(word[wordSize-8:]), nil //nolint:mnd
 }
 
-// readBigIntWord reads a 32-byte word at offset as a *big.Int.
-func readBigIntWord(raw []byte, offset int) (*big.Int, error) {
-	word, err := readWord(raw, offset)
-	if err != nil {
-		return nil, err
-	}
-
-	return new(big.Int).SetBytes(word), nil
-}
-
 // decodeBytesParam decodes a single ABI `bytes` parameter whose head pointer
 // resides at headOffset inside raw.  Returns the raw byte slice.
 func decodeBytesParam(raw []byte, headOffset int) ([]byte, error) {
@@ -156,10 +146,10 @@ func decodeMultiSendTransactions(transactions []byte) ([]multiSendEntry, error) 
 		pos += 20                             //nolint:mnd
 
 		value := new(big.Int).SetBytes(transactions[pos : pos+32]) //nolint:mnd
-		pos += 32                                                   //nolint:mnd
+		pos += 32                                                  //nolint:mnd
 
 		dataLen := int(new(big.Int).SetBytes(transactions[pos : pos+32]).Int64()) //nolint:mnd
-		pos += 32                                                                  //nolint:mnd
+		pos += 32                                                                 //nolint:mnd
 
 		if len(transactions)-pos < dataLen {
 			return nil, fmt.Errorf("multisend: truncated entry data at pos %d", pos)
@@ -171,7 +161,6 @@ func decodeMultiSendTransactions(transactions []byte) ([]multiSendEntry, error) 
 
 		entries = append(entries, multiSendEntry{To: to, Value: value, Data: data})
 	}
-	
+
 	return entries, nil
 }
-

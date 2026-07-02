@@ -43,7 +43,7 @@ func TestServerStartsAndResponds(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	var wg sync.WaitGroup
 	wg.Go(func() {
-		runner(ctx)
+		_ = runner(ctx)
 	})
 
 	// Wait for server to start. Retry a few times.

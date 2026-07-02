@@ -35,7 +35,9 @@ func getFreeGRPCPort() string {
 	if err != nil {
 		panic(fmt.Sprintf("failed to get free port: %v", err))
 	}
-	defer l.Close()
+	defer func() {
+		_ = l.Close()
+	}()
 	return strconv.Itoa(l.Addr().(*net.TCPAddr).Port)
 }
 
@@ -48,11 +50,9 @@ func TestGRPCServerStartsAndResponds(t *testing.T) {
 
 	ctx, cancel := context.WithCancel(context.Background())
 	var wg sync.WaitGroup
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		runner(ctx)
-	}()
+	wg.Go(func() {
+		_ = runner(ctx)
+	})
 
 	// Wait for server to start
 	time.Sleep(100 * time.Millisecond)
@@ -88,7 +88,9 @@ func TestGRPCServerDefaultPort(t *testing.T) {
 	// The server should try to start on default port 50051
 	// This test doesn't verify the actual port, just that it doesn't panic
 	// and attacher is called
-	go runner(ctx)
+	go func() {
+		_ = runner(ctx)
+	}()
 
 	time.Sleep(50 * time.Millisecond)
 	assert.True(t, attacher.attached, "attacher should have been called")
@@ -107,11 +109,9 @@ func TestGRPCServerWithCustomConnectionTimeout(t *testing.T) {
 
 	ctx, cancel := context.WithCancel(context.Background())
 	var wg sync.WaitGroup
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		runner(ctx)
-	}()
+	wg.Go(func() {
+		_ = runner(ctx)
+	})
 
 	// Wait for server to start
 	time.Sleep(100 * time.Millisecond)
@@ -122,7 +122,9 @@ func TestGRPCServerWithCustomConnectionTimeout(t *testing.T) {
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	require.NoError(t, err)
-	defer conn.Close()
+	defer func() {
+		_ = conn.Close()
+	}()
 
 	assert.True(t, attacher.attached, "attacher should have been called")
 
@@ -222,11 +224,9 @@ func TestGRPCServerMultipleOptions(t *testing.T) {
 
 	ctx, cancel := context.WithCancel(context.Background())
 	var wg sync.WaitGroup
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
+	wg.Go(func() {
 		runner(ctx)
-	}()
+	})
 
 	// Wait for server to start
 	time.Sleep(100 * time.Millisecond)
@@ -237,7 +237,9 @@ func TestGRPCServerMultipleOptions(t *testing.T) {
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	require.NoError(t, err)
-	defer conn.Close()
+	defer func() {
+		_ = conn.Close()
+	}()
 
 	healthClient := healthpb.NewHealthClient(conn)
 	resp, err := healthClient.Check(context.Background(), &healthpb.HealthCheckRequest{})

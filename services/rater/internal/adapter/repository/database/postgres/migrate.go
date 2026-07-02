@@ -21,7 +21,9 @@ func Migrate(conn *pgx.Conn) error {
 	}
 
 	dbConn := stdlib.OpenDB(*conn.Config())
-	defer dbConn.Close()
+	defer func() {
+		_ = dbConn.Close()
+	}()
 
 	// Create a new pgx migration driver instance.
 	dbDriver, err := pgxmigrate.WithInstance(dbConn, &pgxmigrate.Config{})

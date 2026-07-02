@@ -16,11 +16,15 @@ func TestGetSecretFromFile(t *testing.T) {
 		content := "my-secret-value"
 		tmpFile, err := os.CreateTemp(t.TempDir(), "secret-*")
 		require.NoError(t, err)
-		defer os.Remove(tmpFile.Name())
+		defer func() {
+			_ = os.Remove(tmpFile.Name())
+		}()
 
 		_, err = tmpFile.WriteString(content)
 		require.NoError(t, err)
-		defer tmpFile.Close()
+		defer func() {
+			_ = tmpFile.Close()
+		}()
 
 		cfg := configs.CoinMarketCapConfig{
 			SecretFile: tmpFile.Name(),

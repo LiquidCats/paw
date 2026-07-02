@@ -2,4 +2,4 @@ module github.com/LiquidCats/paw/lib/observer
 
 go 1.25.0
 
-require golang.org/x/sync v0.20.0
+require golang.org/x/sync v0.21.0

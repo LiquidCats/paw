@@ -31,20 +31,41 @@ jobs:
           filters: |
             lib/evm-input-parser:
               - 'lib/evm-input-parser/**'
+              - 'go.work'
+              - 'go.work.sum'
             lib/graceful:
               - 'lib/graceful/**'
+              - 'go.work'
+              - 'go.work.sum'
             lib/jsonrpc:
               - 'lib/jsonrpc/**'
+              - 'go.work'
+              - 'go.work.sum'
             lib/observer:
               - 'lib/observer/**'
+              - 'go.work'
+              - 'go.work.sum'
             lib/workers:
               - 'lib/workers/**'
+              - 'go.work'
+              - 'go.work.sum'
             services/kms:
               - 'services/kms/**'
+              - 'lib/graceful/**'
+              - 'protos/**'
+              - 'go.work'
+              - 'go.work.sum'
             services/rater:
               - 'services/rater/**'
+              - 'lib/graceful/**'
+              - 'go.work'
+              - 'go.work.sum'
             services/watcher:
               - 'services/watcher/**'
+              - 'lib/graceful/**'
+              - 'lib/jsonrpc/**'
+              - 'go.work'
+              - 'go.work.sum'
 
   test:
     name: Test ${{ matrix.module }}
@@ -69,17 +90,9 @@ jobs:
             **/go.sum
             go.work.sum
 
-      - name: Prepare Go workspace
+      - name: Verify Go workspace
         run: |
-          go work use \
-            ./lib/evm-input-parser \
-            ./lib/graceful \
-            ./lib/jsonrpc \
-            ./lib/observer \
-            ./lib/workers \
-            ./services/kms \
-            ./services/rater \
-            ./services/watcher
+          test "$(go env GOWORK)" = "${GITHUB_WORKSPACE}/go.work"
 
       - name: Download dependencies
         working-directory: ${{ matrix.module }}
@@ -125,7 +138,7 @@ jobs:
       - name: Run golangci-lint
         run: |
           docker run --rm \
-            -e GOWORK=off \
+            -e GOWORK=/src/go.work \
             -v "${GITHUB_WORKSPACE}:/src" \
             -w "/src/${{ matrix.module }}" \
             "golangci/golangci-lint:${{ steps.golangci.outputs.version }}-alpine" \

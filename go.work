@@ -2,14 +2,14 @@ go 1.26.4
 
 use (
 	./lib/evm-input-parser
-
 	./lib/graceful
 	./lib/jsonrpc
 	./lib/observer
 	./lib/workers
-	./protos
-	./services/kms
 
+	./protos
+
+	./services/kms
 	./services/rater
 	./services/watcher
 )

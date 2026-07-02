@@ -20,7 +20,8 @@ func TestCoinApiRepository_Get(t *testing.T) {
 		assert.Equal(t, "test1234", r.Header.Get("X-CoinAPI-Key")) //nolint:canonicalheader
 
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(response))
+		_, err := w.Write([]byte(response))
+		require.NoError(t, err)
 	}))
 	defer ts.Close()
 

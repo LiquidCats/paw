@@ -160,12 +160,16 @@ func TestStdInPassphraseProvider_Get_NonTerminalStdin(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Open(os.DevNull) for stdin error = %v", err)
 	}
-	defer stdin.Close()
+	defer func() {
+		_ = stdin.Close()
+	}()
 
 	stdoutReader, stdoutWriter, err := os.Pipe()
 	require.NoError(t, err)
 
-	defer stdoutReader.Close()
+	defer func() {
+		_ = stdoutReader.Close()
+	}()
 
 	os.Stdin = stdin         //nolint:reassign
 	os.Stdout = stdoutWriter //nolint:reassign

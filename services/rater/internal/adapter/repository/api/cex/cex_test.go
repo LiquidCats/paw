@@ -29,7 +29,8 @@ func TestRepository_Get(t *testing.T) {
 		assert.Contains(t, req.Pairs, "BTC-USD")
 
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(response))
+		_, err = w.Write([]byte(response))
+		require.NoError(t, err)
 	}))
 	defer ts.Close()
 

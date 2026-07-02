@@ -94,7 +94,7 @@ func TestGetSecret(t *testing.T) {
 			t.Run(tt.name, func(t *testing.T) {
 				// Create a test file
 				filePath := filepath.Join(tempDir, "test-secret")
-				err := os.WriteFile(filePath, []byte(tt.fileContent), 0644)
+				err := os.WriteFile(filePath, []byte(tt.fileContent), 0o644)
 				require.NoError(t, err)
 
 				// Test reading the file
@@ -103,7 +103,7 @@ func TestGetSecret(t *testing.T) {
 				assert.Equal(t, tt.expectedRead, result)
 
 				// Clean up
-				os.Remove(filePath)
+				_ = os.Remove(filePath)
 			})
 		}
 	})
@@ -131,15 +131,17 @@ func TestGetSecret(t *testing.T) {
 		filePath := filepath.Join(tempDir, "unreadable-secret")
 
 		// Create a file
-		err := os.WriteFile(filePath, []byte("secret"), 0644)
+		err := os.WriteFile(filePath, []byte("secret"), 0o644)
 		require.NoError(t, err)
 
 		// Make it unreadable
-		err = os.Chmod(filePath, 0000)
+		err = os.Chmod(filePath, 0o000)
 		require.NoError(t, err)
 
 		// Ensure we restore permissions for cleanup
-		defer os.Chmod(filePath, 0644)
+		defer func() {
+			_ = os.Chmod(filePath, 0o644)
+		}()
 
 		result, err := docker.GetSecret(filePath)
 		require.Error(t, err)

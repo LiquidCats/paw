@@ -63,7 +63,9 @@ func TestGRPCServerStartsAndResponds(t *testing.T) {
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	require.NoError(t, err)
-	defer conn.Close()
+	defer func() {
+		_ = conn.Close()
+	}()
 
 	// Use health check service to verify server is running
 	healthClient := healthpb.NewHealthClient(conn)
@@ -192,11 +194,9 @@ func TestGRPCServerPortInUse(t *testing.T) {
 	defer cancel1()
 
 	var wg sync.WaitGroup
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		runner1(ctx1)
-	}()
+	wg.Go(func() {
+		_ = runner1(ctx1)
+	})
 
 	// Wait for first server to start
 	time.Sleep(100 * time.Millisecond)
@@ -225,7 +225,7 @@ func TestGRPCServerMultipleOptions(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	var wg sync.WaitGroup
 	wg.Go(func() {
-		runner(ctx)
+		_ = runner(ctx)
 	})
 
 	// Wait for server to start
@@ -265,11 +265,9 @@ func TestGRPCAttacherCalled(t *testing.T) {
 
 	ctx, cancel := context.WithCancel(context.Background())
 	var wg sync.WaitGroup
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		runner(ctx)
-	}()
+	wg.Go(func() {
+		_ = runner(ctx)
+	})
 
 	time.Sleep(100 * time.Millisecond)
 	cancel()

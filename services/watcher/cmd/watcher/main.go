@@ -4,14 +4,14 @@ import (
 	"context"
 	"os"
 
+	migrator "github.com/LiquidCats/paw/lib/database"
 	"github.com/LiquidCats/paw/services/watcher/configs"
-	"github.com/LiquidCats/paw/services/watcher/internal/adapter/database"
+	"github.com/LiquidCats/paw/services/watcher/internal/adapter/postgresql/database/migrations"
 	"github.com/LiquidCats/paw/services/watcher/internal/app"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/rs/zerolog"
 
 	_ "github.com/lib/pq"
-	_ "go.uber.org/automaxprocs"
 )
 
 func main() {
@@ -43,12 +43,7 @@ func main() {
 	}
 	defer pool.Close()
 
-	migrationConn, err := pool.Acquire(ctx)
-	if err != nil {
-		logger.Fatal().Err(err).Msg("acquire pool connection")
-	}
-
-	if err = database.Migrate(migrationConn.Conn()); err != nil {
+	if err = migrator.MigrateUp(ctx, pool, migrations.FS); err != nil {
 		logger.Fatal().Stack().Err(err).Msg("migrate")
 	}
 

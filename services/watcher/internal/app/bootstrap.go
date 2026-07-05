@@ -10,6 +10,7 @@ import (
 	"github.com/LiquidCats/paw/services/watcher/internal/adapter/http/handlers"
 	"github.com/LiquidCats/paw/services/watcher/internal/adapter/http/router"
 	"github.com/LiquidCats/paw/services/watcher/internal/adapter/metrics"
+	"github.com/LiquidCats/paw/services/watcher/internal/adapter/postgresql"
 	"github.com/LiquidCats/paw/services/watcher/internal/adapter/rpc/evm"
 	"github.com/LiquidCats/paw/services/watcher/internal/adapter/rpc/utxo"
 	"github.com/LiquidCats/paw/services/watcher/internal/adapter/state"
@@ -45,7 +46,7 @@ func Run(ctx context.Context, cfg configs.Config, pool database.DBTX) error {
 
 	redisClient := redis.NewClient(cfg.Redis.ToConfig(ApplicationName))
 
-	dbRepository := database.NewRepository(pool)
+	dbRepository := postgresql.NewRepository(pool)
 
 	for _, chainConfig := range cfg.Chains {
 		blockChan := make(chan *entities.Block, chainConfig.Workers.BlockTransactionsWorkerCount)
@@ -81,7 +82,7 @@ func bootstrapEvmBased(
 	ctx context.Context,
 	chainConfig configs.ChainConfig,
 	redisClient *redis.Client,
-	dbRepository *database.Repository,
+	dbRepository *postgresql.Repository,
 	requestsToNodeMetric *metrics.RequestsToNodeCount,
 	blockChan chan *entities.Block,
 ) []graceful.Runner {
@@ -143,7 +144,7 @@ func bootstrapUtxoBased(
 	ctx context.Context,
 	chainConfig configs.ChainConfig,
 	redisClient *redis.Client,
-	dbRepository *database.Repository,
+	dbRepository *postgresql.Repository,
 	requestsToNodeMetric *metrics.RequestsToNodeCount,
 	txIDChan chan entities.TxID,
 	blockChan chan *entities.Block,

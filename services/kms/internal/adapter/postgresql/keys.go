@@ -26,7 +26,7 @@ func (r *Repository) CreateKey(ctx context.Context, entry entities.KeyEntry) err
 		params.ExpiresAt.Valid = true
 	}
 
-	_, err := r.getQueries(ctx).CreateKey(ctx, params)
+	_, err := r.GetQueries(ctx).CreateKey(ctx, params)
 	if err != nil {
 		return fmt.Errorf("struct=Repository, method=CreateKey, call=queries.CreateKey: %w", err)
 	}
@@ -35,7 +35,7 @@ func (r *Repository) CreateKey(ctx context.Context, entry entities.KeyEntry) err
 }
 
 func (r *Repository) GetAllKeys(ctx context.Context) ([]entities.KeyEntry, error) {
-	keys, err := r.getQueries(ctx).GetAllKeys(ctx)
+	keys, err := r.GetQueries(ctx).GetAllKeys(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("struct=Repository, method=GetKey, call=queries.GetAllKeys: %w", err)
 	}
@@ -69,7 +69,7 @@ func (r *Repository) GetAllKeys(ctx context.Context) ([]entities.KeyEntry, error
 }
 
 func (r *Repository) GetKey(ctx context.Context, keyID entities.KeyID) (*entities.KeyEntry, error) {
-	key, err := r.getQueries(ctx).GetKey(ctx, pgtype.UUID{
+	key, err := r.GetQueries(ctx).GetKey(ctx, pgtype.UUID{
 		Bytes: keyID,
 		Valid: true,
 	})
@@ -100,7 +100,7 @@ func (r *Repository) GetKey(ctx context.Context, keyID entities.KeyID) (*entitie
 }
 
 func (r *Repository) SetExpiration(ctx context.Context, keyID entities.KeyID, expiresAt *time.Time) error {
-	err := r.getQueries(ctx).SetExpiration(ctx, database.SetExpirationParams{
+	err := r.GetQueries(ctx).SetExpiration(ctx, database.SetExpirationParams{
 		KeyID:     pgtype.UUID{Bytes: keyID, Valid: true},
 		ExpiresAt: pgtype.Timestamp{Time: *expiresAt, Valid: true},
 	})
@@ -112,7 +112,7 @@ func (r *Repository) SetExpiration(ctx context.Context, keyID entities.KeyID, ex
 }
 
 func (r *Repository) SetStatus(ctx context.Context, keyID entities.KeyID, status entities.KeyStatus) error {
-	err := r.getQueries(ctx).SetStatus(ctx, database.SetStatusParams{
+	err := r.GetQueries(ctx).SetStatus(ctx, database.SetStatusParams{
 		KeyID:  pgtype.UUID{Bytes: keyID, Valid: true},
 		Status: string(status),
 	})

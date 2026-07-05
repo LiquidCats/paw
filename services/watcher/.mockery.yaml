@@ -1,0 +1,16 @@
+all: false
+filename: '{{.InterfaceName}}.go'
+force-file-write: true
+formatter: goimports
+log-level: info
+structname: '{{.Mock}}{{.InterfaceName}}'
+require-template-schema-exists: true
+template: testify
+template-schema: '{{.Template}}.schema.json'
+packages:
+  github.com/LiquidCats/paw/services/watcher/internal/app:
+    config:
+      pkgname: mocks
+      dir: "test/mocks"
+      recursive: true
+      all: true

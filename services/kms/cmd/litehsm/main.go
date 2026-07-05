@@ -5,11 +5,13 @@ import (
 	"log/slog"
 	"os"
 
+	db "github.com/LiquidCats/paw/lib/database"
 	"github.com/LiquidCats/paw/lib/graceful"
 	"github.com/LiquidCats/paw/services/litehsm/configs"
 	"github.com/LiquidCats/paw/services/litehsm/internal/adapter/keychain"
 	"github.com/LiquidCats/paw/services/litehsm/internal/adapter/postgresql"
 	"github.com/LiquidCats/paw/services/litehsm/internal/adapter/postgresql/database"
+	"github.com/LiquidCats/paw/services/litehsm/internal/adapter/postgresql/database/migrations"
 	"github.com/LiquidCats/paw/services/litehsm/internal/adapter/sealer"
 	"github.com/LiquidCats/paw/services/litehsm/internal/adapter/transport/grpc"
 	"github.com/LiquidCats/paw/services/litehsm/internal/app/domain/entities"
@@ -52,24 +54,17 @@ func main() {
 	}
 	defer pool.Close()
 
-	migrationConn, err := pool.Acquire(ctx)
-	if err != nil {
-		logger.ErrorContext(ctx, "acquire migration connection", slog.String("err", err.Error()))
+	if err = db.MigrateUp(ctx, pool, migrations.FS); err != nil {
+		logger.ErrorContext(ctx, "migrate db", slog.String("err", err.Error()))
 
 		return
 	}
-
-	if err = database.Migrate(ctx, migrationConn.Conn()); err != nil {
-		logger.ErrorContext(ctx, "migration connection", slog.String("err", err.Error()))
-
-		return
-	}
-
-	migrationConn.Release()
 
 	queries := database.New(pool)
-	tx := postgresql.NewTxManager(pool)
-	db := postgresql.NewRepository(queries, tx)
+	txManager := db.NewTxManager(pool)
+	queriesManager := db.NewQueriesTxManager[database.Queries](txManager, queries)
+
+	repo := postgresql.NewRepository(queriesManager)
 
 	seal := sealer.NewDefault(bootstrap.AppMagic)
 
@@ -96,9 +91,9 @@ func main() {
 
 	_ = kch
 
-	keyManagerCreateKey := hsm.NewKeyManagerCreateKey(db)
-	keyManagerSetExpiration := hsm.NewKeyManagerSetExpiration(db)
-	keyManagerSetStatus := hsm.NewKeyManagerSetStatus(db)
+	keyManagerCreateKey := hsm.NewKeyManagerCreateKey(repo)
+	keyManagerSetExpiration := hsm.NewKeyManagerSetExpiration(repo)
+	keyManagerSetStatus := hsm.NewKeyManagerSetStatus(repo)
 
 	var runners []graceful.Runner
 

@@ -4,12 +4,14 @@ import (
 	"context"
 	"os"
 
+	"github.com/LiquidCats/paw/lib/database"
 	"github.com/LiquidCats/paw/lib/graceful"
 	"github.com/LiquidCats/paw/services/rater/configs"
 	"github.com/LiquidCats/paw/services/rater/internal/adapter/http"
 	"github.com/LiquidCats/paw/services/rater/internal/adapter/http/middlware"
 	"github.com/LiquidCats/paw/services/rater/internal/adapter/http/routes"
 	"github.com/LiquidCats/paw/services/rater/internal/adapter/metrics/prometheus"
+	"github.com/LiquidCats/paw/services/rater/internal/adapter/postgresql/database/migrations"
 	"github.com/LiquidCats/paw/services/rater/internal/adapter/repository/cache/redis"
 	"github.com/LiquidCats/paw/services/rater/internal/adapter/repository/database/postgres"
 	"github.com/LiquidCats/paw/services/rater/internal/adapter/scheduler/cron"
@@ -60,17 +62,10 @@ func main() { //nolint:funlen
 			Msg("connect to database")
 	}
 
-	migrationConn, err := pool.Acquire(ctx)
-	if err != nil {
+	if err = database.MigrateUp(ctx, pool, migrations.FS); err != nil {
 		logger.Fatal().
 			Any("err", eris.ToJSON(err, true)).
-			Msg("acquire pool connection")
-	}
-
-	if err = postgres.Migrate(migrationConn.Conn()); err != nil {
-		logger.Fatal().
-			Any("err", eris.ToJSON(err, true)).
-			Msg("migrate")
+			Msg("database migration")
 	}
 
 	cache := redis.New(cfg.Redis)

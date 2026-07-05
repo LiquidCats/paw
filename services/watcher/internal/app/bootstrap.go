@@ -3,18 +3,21 @@ package app
 import (
 	"context"
 
+	db "github.com/LiquidCats/paw/lib/database"
 	"github.com/LiquidCats/paw/lib/graceful"
 	"github.com/LiquidCats/paw/services/watcher/configs"
 	"github.com/LiquidCats/paw/services/watcher/internal/adapter/bus"
-	"github.com/LiquidCats/paw/services/watcher/internal/adapter/database"
 	"github.com/LiquidCats/paw/services/watcher/internal/adapter/http/handlers"
 	"github.com/LiquidCats/paw/services/watcher/internal/adapter/http/router"
 	"github.com/LiquidCats/paw/services/watcher/internal/adapter/metrics"
+	"github.com/LiquidCats/paw/services/watcher/internal/adapter/postgresql"
+	"github.com/LiquidCats/paw/services/watcher/internal/adapter/postgresql/database"
 	"github.com/LiquidCats/paw/services/watcher/internal/adapter/rpc/evm"
 	"github.com/LiquidCats/paw/services/watcher/internal/adapter/rpc/utxo"
 	"github.com/LiquidCats/paw/services/watcher/internal/adapter/state"
 	"github.com/LiquidCats/paw/services/watcher/internal/app/domain/entities"
 	"github.com/LiquidCats/paw/services/watcher/internal/app/usecase"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/redis/go-redis/v9"
 	"github.com/rotisserie/eris"
 	"github.com/rs/zerolog"
@@ -22,7 +25,7 @@ import (
 
 const ApplicationName = "watcher"
 
-func Run(ctx context.Context, cfg configs.Config, pool database.DBTX) error {
+func Run(ctx context.Context, cfg configs.Config, pool *pgxpool.Pool) error {
 	runners := []graceful.Runner{
 		graceful.Signals,
 		graceful.Server(
@@ -45,7 +48,12 @@ func Run(ctx context.Context, cfg configs.Config, pool database.DBTX) error {
 
 	redisClient := redis.NewClient(cfg.Redis.ToConfig(ApplicationName))
 
-	dbRepository := database.NewRepository(pool)
+	queries := database.New(pool)
+
+	txManager := db.NewTxManager(pool)
+	queriesTxManager := db.NewQueriesTxManager[database.Queries](txManager, queries)
+
+	dbRepository := postgresql.NewRepository(queriesTxManager)
 
 	for _, chainConfig := range cfg.Chains {
 		blockChan := make(chan *entities.Block, chainConfig.Workers.BlockTransactionsWorkerCount)
@@ -81,7 +89,7 @@ func bootstrapEvmBased(
 	ctx context.Context,
 	chainConfig configs.ChainConfig,
 	redisClient *redis.Client,
-	dbRepository *database.Repository,
+	dbRepository *postgresql.Repository,
 	requestsToNodeMetric *metrics.RequestsToNodeCount,
 	blockChan chan *entities.Block,
 ) []graceful.Runner {
@@ -143,7 +151,7 @@ func bootstrapUtxoBased(
 	ctx context.Context,
 	chainConfig configs.ChainConfig,
 	redisClient *redis.Client,
-	dbRepository *database.Repository,
+	dbRepository *postgresql.Repository,
 	requestsToNodeMetric *metrics.RequestsToNodeCount,
 	txIDChan chan entities.TxID,
 	blockChan chan *entities.Block,

@@ -2,35 +2,29 @@ package database
 
 import (
 	"context"
-	"embed"
 	"fmt"
+	"io/fs"
 
 	"github.com/golang-migrate/migrate/v4"
 	pgxmigrate "github.com/golang-migrate/migrate/v4/database/pgx/v5"
 	"github.com/golang-migrate/migrate/v4/source/iofs"
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/jackc/pgx/v5/stdlib"
 	"github.com/rotisserie/eris"
 )
 
-//go:embed migrations/*.sql
-var migrations embed.FS
-
-func Migrate(ctx context.Context, conn *pgx.Conn) error {
-	defer func() {
-		_ = conn.Close(ctx)
-	}()
+func MigrateUp(ctx context.Context, pool *pgxpool.Pool, migrations fs.FS) error {
+	conn, err := pool.Acquire(ctx)
+	if err != nil {
+		return fmt.Errorf("acquire migartion connection from pool: %w", err)
+	}
 
 	sourceDriver, err := iofs.New(migrations, "migrations")
 	if err != nil {
-		return fmt.Errorf("iofs: %w", err)
+		return fmt.Errorf("new migration source driver: %w", err)
 	}
 
-	defer func() {
-		_ = sourceDriver.Close()
-	}()
-
-	dbConn := stdlib.OpenDB(*conn.Config())
+	dbConn := stdlib.OpenDB(*conn.Conn().Config())
 	defer func() {
 		_ = dbConn.Close()
 	}()
@@ -38,7 +32,7 @@ func Migrate(ctx context.Context, conn *pgx.Conn) error {
 	// Create a new pgx migration driver instance.
 	dbDriver, err := pgxmigrate.WithInstance(dbConn, &pgxmigrate.Config{})
 	if err != nil {
-		return fmt.Errorf("pgxmigrate: %w", err)
+		return fmt.Errorf("create migration db driver: %w", err)
 	}
 
 	// Create the migrate instance using the source and database drivers.
@@ -47,12 +41,12 @@ func Migrate(ctx context.Context, conn *pgx.Conn) error {
 		"pgx", dbDriver,
 	)
 	if err != nil {
-		return fmt.Errorf("migrate instance: %w", err)
+		return fmt.Errorf("create migration instance: %w", err)
 	}
 
 	// Run the up migrations.
 	if err = m.Up(); err != nil && !eris.Is(err, migrate.ErrNoChange) {
-		return fmt.Errorf("up: %w", err)
+		return fmt.Errorf("migration up: %w", err)
 	}
 
 	return nil

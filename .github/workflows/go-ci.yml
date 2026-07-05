@@ -19,13 +19,13 @@ jobs:
       modules: ${{ steps.filter.outputs.changes }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Detect changed modules
         id: filter
-        uses: dorny/paths-filter@v3
+        uses: dorny/paths-filter@v4
         with:
           filters: |
             lib/evm-input-parser:
@@ -78,10 +78,10 @@ jobs:
         module: ${{ fromJSON(needs.changes.outputs.modules) }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: "1.26.4"
           cache-dependency-path: |
@@ -113,7 +113,7 @@ jobs:
         module: ${{ fromJSON(needs.changes.outputs.modules) }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Run golangci-lint
         run: |

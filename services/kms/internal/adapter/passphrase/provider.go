@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/LiquidCats/paw/services/litehsm/pkg/unsafe"
+	"github.com/LiquidCats/paw/services/kms/pkg/unsafe"
 	"github.com/awnumar/memguard"
 	"golang.org/x/term"
 )

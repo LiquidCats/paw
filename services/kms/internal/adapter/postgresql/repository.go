@@ -2,7 +2,7 @@ package postgresql
 
 import (
 	db "github.com/LiquidCats/paw/lib/database"
-	"github.com/LiquidCats/paw/services/litehsm/internal/adapter/postgresql/database"
+	"github.com/LiquidCats/paw/services/kms/internal/adapter/postgresql/database"
 )
 
 type Repository struct {

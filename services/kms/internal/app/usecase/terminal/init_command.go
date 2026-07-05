@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/LiquidCats/paw/services/litehsm/internal/app/ports"
+	"github.com/LiquidCats/paw/services/kms/internal/app/ports"
 	"github.com/awnumar/memguard"
 )
 

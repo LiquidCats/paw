@@ -5,10 +5,10 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/LiquidCats/paw/services/litehsm/internal/adapter/passphrase"
-	"github.com/LiquidCats/paw/services/litehsm/internal/adapter/sealer"
-	"github.com/LiquidCats/paw/services/litehsm/internal/app/usecase/terminal"
-	"github.com/LiquidCats/paw/services/litehsm/internal/bootstrap"
+	"github.com/LiquidCats/paw/services/kms/internal/adapter/passphrase"
+	"github.com/LiquidCats/paw/services/kms/internal/adapter/sealer"
+	"github.com/LiquidCats/paw/services/kms/internal/app/usecase/terminal"
+	"github.com/LiquidCats/paw/services/kms/internal/bootstrap"
 )
 
 func main() {

@@ -1,9 +1,9 @@
-module github.com/LiquidCats/paw/services/litehsm
+module github.com/LiquidCats/paw/services/kms
 
 go 1.26.4
 
 require (
-	github.com/LiquidCats/paw/lib/database v0.0.0-20260727221241-1c796802a043
+	github.com/LiquidCats/paw/lib/database v0.0.0-20260705195404-b396f1a06705
 	github.com/LiquidCats/paw/lib/graceful v0.0.0-20260701214004-c467d8d09640
 	github.com/LiquidCats/paw/protos v0.0.0-20260701214004-c467d8d09640
 	github.com/awnumar/memguard v0.23.0
@@ -16,7 +16,7 @@ require (
 	github.com/stretchr/testify v1.11.1
 	golang.org/x/crypto v0.53.0
 	golang.org/x/term v0.44.0
-	google.golang.org/grpc v1.82.1
+	google.golang.org/grpc v1.82.0
 	google.golang.org/protobuf v1.36.11
 	gopkg.in/yaml.v3 v3.0.1
 )

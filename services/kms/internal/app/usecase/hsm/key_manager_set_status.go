@@ -5,9 +5,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/LiquidCats/paw/services/litehsm/internal/app/domain/entities"
-	domainErr "github.com/LiquidCats/paw/services/litehsm/internal/app/domain/errors"
-	"github.com/LiquidCats/paw/services/litehsm/internal/app/ports"
+	"github.com/LiquidCats/paw/services/kms/internal/app/domain/entities"
+	domainErr "github.com/LiquidCats/paw/services/kms/internal/app/domain/errors"
+	"github.com/LiquidCats/paw/services/kms/internal/app/ports"
 	"github.com/jackc/pgx/v5"
 )
 

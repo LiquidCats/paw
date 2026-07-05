@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/LiquidCats/paw/services/litehsm/pkg/unsafe"
+	"github.com/LiquidCats/paw/services/kms/pkg/unsafe"
 	"gopkg.in/yaml.v3"
 )
 

@@ -5,7 +5,7 @@
 package litehsm
 
 import (
-	"github.com/LiquidCats/paw/services/litehsm/internal/app/domain/entities"
+	"github.com/LiquidCats/paw/services/kms/internal/app/domain/entities"
 	"github.com/awnumar/memguard"
 	mock "github.com/stretchr/testify/mock"
 )

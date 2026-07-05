@@ -3,7 +3,7 @@ package base58
 import (
 	"math/big"
 
-	"github.com/LiquidCats/paw/services/litehsm/pkg/sha"
+	"github.com/LiquidCats/paw/services/kms/pkg/sha"
 )
 
 // CheckEncode prepends a version byte, appends a four-byte checksum, and returns

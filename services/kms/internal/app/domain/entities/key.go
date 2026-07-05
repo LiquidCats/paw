@@ -4,8 +4,8 @@ import (
 	"slices"
 	"time"
 
-	domainErr "github.com/LiquidCats/paw/services/litehsm/internal/app/domain/errors"
 	v1 "github.com/LiquidCats/paw/protos/gen/go/services/litehsm/v1"
+	domainErr "github.com/LiquidCats/paw/services/kms/internal/app/domain/errors"
 	"github.com/google/uuid"
 )
 

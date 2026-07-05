@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/LiquidCats/paw/services/litehsm/internal/adapter/postgresql/database"
-	"github.com/LiquidCats/paw/services/litehsm/internal/app/domain/entities"
+	"github.com/LiquidCats/paw/services/kms/internal/adapter/postgresql/database"
+	"github.com/LiquidCats/paw/services/kms/internal/app/domain/entities"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 

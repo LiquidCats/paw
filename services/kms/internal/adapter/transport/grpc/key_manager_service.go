@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/LiquidCats/paw/services/litehsm/internal/app/domain/entities"
-	"github.com/LiquidCats/paw/services/litehsm/internal/app/usecase/hsm"
-	"github.com/LiquidCats/paw/services/litehsm/pkg/unsafe"
 	v1 "github.com/LiquidCats/paw/protos/gen/go/services/litehsm/v1"
+	"github.com/LiquidCats/paw/services/kms/internal/app/domain/entities"
+	"github.com/LiquidCats/paw/services/kms/internal/app/usecase/hsm"
+	"github.com/LiquidCats/paw/services/kms/pkg/unsafe"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )

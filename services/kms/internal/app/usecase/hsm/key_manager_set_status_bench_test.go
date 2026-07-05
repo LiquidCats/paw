@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
-	"github.com/LiquidCats/paw/services/litehsm/internal/app/domain/entities"
-	"github.com/LiquidCats/paw/services/litehsm/internal/app/usecase/hsm"
-	mocks "github.com/LiquidCats/paw/services/litehsm/test/mocks/litehsm"
+	"github.com/LiquidCats/paw/services/kms/internal/app/domain/entities"
+	"github.com/LiquidCats/paw/services/kms/internal/app/usecase/hsm"
+	mocks "github.com/LiquidCats/paw/services/kms/test/mocks/litehsm"
 	"github.com/google/uuid"
 )
 

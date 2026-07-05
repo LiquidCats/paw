@@ -3,7 +3,7 @@ package sealer_test
 import (
 	"testing"
 
-	"github.com/LiquidCats/paw/services/litehsm/internal/adapter/sealer"
+	"github.com/LiquidCats/paw/services/kms/internal/adapter/sealer"
 )
 
 func BenchmarkSealing_Seal(b *testing.B) {

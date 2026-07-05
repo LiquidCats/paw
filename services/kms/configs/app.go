@@ -1,6 +1,6 @@
 package configs
 
-import "github.com/LiquidCats/paw/services/litehsm/pkg/configuration"
+import "github.com/LiquidCats/paw/services/kms/pkg/configuration"
 
 type AppConfig struct {
 	KeyManager KeyManagerConfig `yaml:"key_manager"`

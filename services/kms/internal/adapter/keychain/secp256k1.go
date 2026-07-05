@@ -7,9 +7,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/LiquidCats/paw/services/litehsm/internal/app/domain/entities"
-	"github.com/LiquidCats/paw/services/litehsm/internal/app/ports"
-	"github.com/LiquidCats/paw/services/litehsm/pkg/unsafe"
+	"github.com/LiquidCats/paw/services/kms/internal/app/domain/entities"
+	"github.com/LiquidCats/paw/services/kms/internal/app/ports"
+	"github.com/LiquidCats/paw/services/kms/pkg/unsafe"
 	"github.com/awnumar/memguard"
 	"github.com/decred/dcrd/dcrec/secp256k1/v4"
 )

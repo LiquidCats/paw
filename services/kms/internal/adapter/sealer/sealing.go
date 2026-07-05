@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/LiquidCats/paw/services/litehsm/internal/app/domain/entities"
+	"github.com/LiquidCats/paw/services/kms/internal/app/domain/entities"
 	"github.com/awnumar/memguard"
 	"golang.org/x/crypto/chacha20poly1305"
 )

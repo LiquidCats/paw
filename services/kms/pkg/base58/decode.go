@@ -3,7 +3,7 @@ package base58
 import (
 	"math/big"
 
-	"github.com/LiquidCats/paw/services/litehsm/pkg/sha"
+	"github.com/LiquidCats/paw/services/kms/pkg/sha"
 )
 
 // CheckDecode decodes a Base58Check encoded string and verifies the checksum.

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/LiquidCats/paw/services/litehsm/internal/app/domain/entities"
+	"github.com/LiquidCats/paw/services/kms/internal/app/domain/entities"
 	"github.com/stretchr/testify/suite"
 )
 

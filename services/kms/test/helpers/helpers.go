@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	domainErr "github.com/LiquidCats/paw/services/litehsm/internal/app/domain/errors"
+	domainErr "github.com/LiquidCats/paw/services/kms/internal/app/domain/errors"
 )
 
 func RequireValidationError(t *testing.T, err error, wantMsg string) {

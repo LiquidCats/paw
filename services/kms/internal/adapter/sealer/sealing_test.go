@@ -4,8 +4,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/LiquidCats/paw/services/litehsm/internal/adapter/sealer"
-	"github.com/LiquidCats/paw/services/litehsm/internal/app/domain/entities"
+	"github.com/LiquidCats/paw/services/kms/internal/adapter/sealer"
+	"github.com/LiquidCats/paw/services/kms/internal/app/domain/entities"
 	"github.com/awnumar/memguard"
 )
 

@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/LiquidCats/paw/services/litehsm/internal/adapter/passphrase"
+	"github.com/LiquidCats/paw/services/kms/internal/adapter/passphrase"
 	"github.com/awnumar/memguard"
 	"github.com/stretchr/testify/require"
 )

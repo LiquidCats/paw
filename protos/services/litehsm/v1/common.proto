@@ -20,3 +20,8 @@ enum KeyStatus {
     KEY_STATUS_DISABLED = 2;
     KEY_STATUS_DELETED = 3;
 }
+
+message SenderInfo {
+    string address = 1;
+    string index = 2;
+}

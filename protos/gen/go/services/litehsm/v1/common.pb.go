@@ -165,11 +165,67 @@ func (KeyStatus) EnumDescriptor() ([]byte, []int) {
 	return file_services_litehsm_v1_common_proto_rawDescGZIP(), []int{2}
 }
 
+type SenderInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Address       string                 `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
+	Index         string                 `protobuf:"bytes,2,opt,name=index,proto3" json:"index,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SenderInfo) Reset() {
+	*x = SenderInfo{}
+	mi := &file_services_litehsm_v1_common_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SenderInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SenderInfo) ProtoMessage() {}
+
+func (x *SenderInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_services_litehsm_v1_common_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SenderInfo.ProtoReflect.Descriptor instead.
+func (*SenderInfo) Descriptor() ([]byte, []int) {
+	return file_services_litehsm_v1_common_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *SenderInfo) GetAddress() string {
+	if x != nil {
+		return x.Address
+	}
+	return ""
+}
+
+func (x *SenderInfo) GetIndex() string {
+	if x != nil {
+		return x.Index
+	}
+	return ""
+}
+
 var File_services_litehsm_v1_common_proto protoreflect.FileDescriptor
 
 const file_services_litehsm_v1_common_proto_rawDesc = "" +
 	"\n" +
-	" services/litehsm/v1/common.proto\x12\x13services.litehsm.v1*3\n" +
+	" services/litehsm/v1/common.proto\x12\x13services.litehsm.v1\"<\n" +
+	"\n" +
+	"SenderInfo\x12\x18\n" +
+	"\aaddress\x18\x01 \x01(\tR\aaddress\x12\x14\n" +
+	"\x05index\x18\x02 \x01(\tR\x05index*3\n" +
 	"\x05Curve\x12\x15\n" +
 	"\x11CURVE_UNSPECIFIED\x10\x00\x12\x13\n" +
 	"\x0fCURVE_SECP256K1\x10\x01*;\n" +
@@ -195,10 +251,12 @@ func file_services_litehsm_v1_common_proto_rawDescGZIP() []byte {
 }
 
 var file_services_litehsm_v1_common_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
+var file_services_litehsm_v1_common_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_services_litehsm_v1_common_proto_goTypes = []any{
-	(Curve)(0),     // 0: services.litehsm.v1.Curve
-	(Algorithm)(0), // 1: services.litehsm.v1.Algorithm
-	(KeyStatus)(0), // 2: services.litehsm.v1.KeyStatus
+	(Curve)(0),         // 0: services.litehsm.v1.Curve
+	(Algorithm)(0),     // 1: services.litehsm.v1.Algorithm
+	(KeyStatus)(0),     // 2: services.litehsm.v1.KeyStatus
+	(*SenderInfo)(nil), // 3: services.litehsm.v1.SenderInfo
 }
 var file_services_litehsm_v1_common_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -219,13 +277,14 @@ func file_services_litehsm_v1_common_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_services_litehsm_v1_common_proto_rawDesc), len(file_services_litehsm_v1_common_proto_rawDesc)),
 			NumEnums:      3,
-			NumMessages:   0,
+			NumMessages:   1,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_services_litehsm_v1_common_proto_goTypes,
 		DependencyIndexes: file_services_litehsm_v1_common_proto_depIdxs,
 		EnumInfos:         file_services_litehsm_v1_common_proto_enumTypes,
+		MessageInfos:      file_services_litehsm_v1_common_proto_msgTypes,
 	}.Build()
 	File_services_litehsm_v1_common_proto = out.File
 	file_services_litehsm_v1_common_proto_goTypes = nil

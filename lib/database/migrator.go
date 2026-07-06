@@ -2,7 +2,6 @@ package database
 
 import (
 	"context"
-	"fmt"
 	"io/fs"
 
 	"github.com/golang-migrate/migrate/v4"
@@ -16,12 +15,12 @@ import (
 func MigrateUp(ctx context.Context, pool *pgxpool.Pool, migrations fs.FS) error {
 	conn, err := pool.Acquire(ctx)
 	if err != nil {
-		return fmt.Errorf("acquire migartion connection from pool: %w", err)
+		return eris.Wrap(err, "acquire migartion connection from pool")
 	}
 
 	sourceDriver, err := iofs.New(migrations, "migrations")
 	if err != nil {
-		return fmt.Errorf("new migration source driver: %w", err)
+		return eris.Wrap(err, "new migration source driver")
 	}
 
 	dbConn := stdlib.OpenDB(*conn.Conn().Config())
@@ -32,7 +31,7 @@ func MigrateUp(ctx context.Context, pool *pgxpool.Pool, migrations fs.FS) error 
 	// Create a new pgx migration driver instance.
 	dbDriver, err := pgxmigrate.WithInstance(dbConn, &pgxmigrate.Config{})
 	if err != nil {
-		return fmt.Errorf("create migration db driver: %w", err)
+		return eris.Wrap(err, "create migration db driver")
 	}
 
 	// Create the migrate instance using the source and database drivers.
@@ -41,12 +40,12 @@ func MigrateUp(ctx context.Context, pool *pgxpool.Pool, migrations fs.FS) error 
 		"pgx", dbDriver,
 	)
 	if err != nil {
-		return fmt.Errorf("create migration instance: %w", err)
+		return eris.Wrap(err, "create migration instance")
 	}
 
 	// Run the up migrations.
 	if err = m.Up(); err != nil && !eris.Is(err, migrate.ErrNoChange) {
-		return fmt.Errorf("migration up: %w", err)
+		return eris.Wrap(err, "migration up")
 	}
 
 	return nil

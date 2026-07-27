@@ -3,6 +3,7 @@ module github.com/LiquidCats/paw/services/watcher
 go 1.26.4
 
 require (
+	github.com/LiquidCats/paw/lib/database v0.0.0-20260705195404-b396f1a06705
 	github.com/LiquidCats/paw/lib/graceful v0.0.0-20260701212830-3d067ba8e9f9
 	github.com/LiquidCats/paw/lib/jsonrpc v0.0.0-20260701213822-48f13f3b9a01
 	github.com/bytedance/sonic v1.15.0
@@ -29,7 +30,9 @@ require (
 	github.com/go-playground/validator/v10 v10.30.1 // indirect
 	github.com/goccy/go-json v0.10.5 // indirect
 	github.com/goccy/go-yaml v1.19.2 // indirect
+	github.com/golang-migrate/migrate/v4 v4.19.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
+	github.com/jackc/pgerrcode v0.0.0-20250907135507-afb5586c32a6 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.18.4 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
@@ -51,7 +54,7 @@ require (
 	go.yaml.in/yaml/v2 v2.4.2 // indirect
 	golang.org/x/net v0.56.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260526163538-3dc84a4a5aaa // indirect
-	google.golang.org/grpc v1.81.1 // indirect
+	google.golang.org/grpc v1.82.1 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 )
 

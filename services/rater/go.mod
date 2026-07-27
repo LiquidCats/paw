@@ -1,8 +1,9 @@
 module github.com/LiquidCats/paw/services/rater
 
-go 1.26.0
+go 1.26.4
 
 require (
+	github.com/LiquidCats/paw/lib/database v0.0.0-20260705195404-b396f1a06705
 	github.com/LiquidCats/paw/lib/graceful v0.0.0-20260701210533-94d1cefb8f31
 	github.com/alicebob/miniredis/v2 v2.37.0
 	github.com/bytedance/sonic v1.15.0
@@ -77,7 +78,7 @@ require (
 	golang.org/x/sys v0.46.0 // indirect
 	golang.org/x/text v0.38.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260526163538-3dc84a4a5aaa // indirect
-	google.golang.org/grpc v1.81.1 // indirect
+	google.golang.org/grpc v1.82.1 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

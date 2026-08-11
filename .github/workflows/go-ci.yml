@@ -122,4 +122,4 @@ jobs:
             -v "${GITHUB_WORKSPACE}:/src" \
             -w "/src/${{ matrix.module }}" \
             "golangci/golangci-lint:v2.11.4-alpine" \
-            golangci-lint run ./...
+            golangci-lint run ./... --configs=${GITHUB_WORKSPACE}/.golangci.yaml

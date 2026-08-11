@@ -261,7 +261,7 @@ internal/adapter/postgresql/database/migrations
 Regenerate generated database code with:
 
 ```bash
-make db-gen
+make generate-sql MODULE=services/kms
 ```
 
 ---
@@ -321,6 +321,8 @@ The image exposes port `8080` in the current Dockerfile, while the application d
 
 ## Development
 
+Run the `make` commands in this section from the repository root.
+
 ### Prerequisites
 
 - Go 1.26.4+
@@ -337,7 +339,7 @@ go test ./...
 Containerized test target:
 
 ```bash
-make run-tests
+make test MODULE=services/kms
 ```
 
 ### Benchmark
@@ -349,7 +351,7 @@ go test -bench=. ./...
 Containerized benchmark target:
 
 ```bash
-make run-bench
+make bench MODULE=services/kms
 ```
 
 ### Mocks
@@ -357,20 +359,20 @@ make run-bench
 Mocks are generated with `vektra/mockery` v3 into `test/mocks/litehsm`.
 
 ```bash
-make mock
+make mock MODULE=services/kms
 ```
 
 ### Lint
 
 ```bash
-make lint
-make lint-fix
+make lint MODULE=services/kms
+make lint-fix MODULE=services/kms
 ```
 
 ### SQLC
 
 ```bash
-make db-gen
+make generate-sql MODULE=services/kms
 ```
 
 ### Build

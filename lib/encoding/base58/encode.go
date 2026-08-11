@@ -3,7 +3,7 @@ package base58
 import (
 	"math/big"
 
-	"github.com/LiquidCats/paw/services/kms/pkg/sha"
+	"github.com/LiquidCats/paw/lib/crypto/sha256"
 )
 
 // CheckEncode prepends a version byte, appends a four-byte checksum, and returns
@@ -13,7 +13,7 @@ func (c *Codec) CheckEncode(input []byte, prefix ...byte) string {
 	b = append(b, prefix...)
 	b = append(b, input...)
 
-	cksum := sha.DoubleSHA256Checksum(b)
+	cksum := sha256.DoubleSHA256Checksum(b)
 	b = append(b, cksum[:]...)
 	return c.Encode(b)
 }

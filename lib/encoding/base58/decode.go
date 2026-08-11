@@ -3,7 +3,7 @@ package base58
 import (
 	"math/big"
 
-	"github.com/LiquidCats/paw/services/kms/pkg/sha"
+	"github.com/LiquidCats/paw/lib/crypto/sha256"
 )
 
 // CheckDecode decodes a Base58Check encoded string and verifies the checksum.
@@ -15,7 +15,7 @@ func (c *Codec) CheckDecode(input string) (result []byte, err error) { // nolint
 
 	var cksum [4]byte
 	copy(cksum[:], decoded[len(decoded)-4:])
-	if sha.DoubleSHA256Checksum(decoded[:len(decoded)-4]) != cksum {
+	if sha256.DoubleSHA256Checksum(decoded[:len(decoded)-4]) != cksum {
 		return nil, ErrChecksum
 	}
 

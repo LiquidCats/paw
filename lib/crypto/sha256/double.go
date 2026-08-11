@@ -1,6 +1,8 @@
-package sha
+package sha256
 
-import "crypto/sha256"
+import (
+	"crypto/sha256"
+)
 
 func DoubleSHA256(input []byte) []byte {
 	h := sha256.Sum256(input)

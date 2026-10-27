@@ -1,12 +1,12 @@
 version: v2
 inputs:
-  - directory: .
+  - directory: /defs/protos
 plugins:
   - remote: buf.build/protocolbuffers/go
-    out: gen/go
+    out: /defs/pkg/grpc
     opt:
       - paths=source_relative
   - remote: buf.build/grpc/go
-    out: gen/go
+    out: /defs/pkg/grpc
     opt:
       - paths=source_relative

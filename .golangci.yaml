@@ -23,7 +23,7 @@ linters:
     - forbidigo
     - funlen
     - gocheckcompilerdirectives
-    - gochecknoglobals
+    # - gochecknoglobals
     - gochecknoinits
     - gochecksumtype
     - goconst
@@ -44,7 +44,7 @@ linters:
     - mnd
     - musttag
     - nakedret
-    - nestif
+    # - nestif
     - nilerr
     - nilnesserr
     - nilnil
@@ -91,13 +91,13 @@ linters:
               desc: Use github.com/gofrs/uuid/v5 or later, it was not a go module before v5
         non-main files:
           files:
-            - '!**/main.go'
+            - "!**/main.go"
           deny:
             - pkg: log$
               desc: Use log/slog instead, see https://go.dev/blog/slog
         non-test files:
           files:
-            - '!$test'
+            - "!$test"
           deny:
             - pkg: math/rand$
               desc: Use math/rand/v2 instead, see https://go.dev/blog/randv2

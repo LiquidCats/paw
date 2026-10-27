@@ -1,0 +1,82 @@
+x-common-env: &common-env
+  GOMAXPROCS: 1
+x-watcher-env: &watcher-env
+  <<: *common-env
+  WATCHER_APP_LOG_LEVEL: debug
+
+  WATCHER_DB_HOST: postgres
+  WATCHER_DB_PORT: 5432
+  WATCHER_DB_USER: watcher_db_user
+  WATCHER_DB_PASSWORD: watcher_db_secret
+  WATCHER_DB_DATABASE: watcher_db
+
+  WATCHER_REDIS_HOST: redis
+  WATCHER_REDIS_PORT: 6379
+  WATCHER_REDIS_DB: 0
+x-rater-env: &rater-env
+  <<: *common-env
+  WATCHER_APP_LOG_LEVEL: debug
+
+  RATER_DB_HOST: postgres
+  RATER_DB_PORT: 5432
+  RATER_DB_USER: rater_db_user
+  RATER_DB_PASSWORD: rater_db_secret
+  RATER_DB_DATABASE: rater_db
+
+  RATER_REDIS_HOST: redis
+  RATER_REDIS_PORT: 6379
+  RATER_REDIS_DB: 0
+
+services:
+  rater:
+    build:
+      dockerfile: ./build/docker/Dockerfile.dev
+      context: .
+      args:
+        MODULE_NAME: "rater"
+    environment:
+      <<: *rater-env
+    volumes:
+      - .:/app
+      - godeps:/go
+    depends_on:
+      - postgres
+      - redis
+
+  watcher:
+    build:
+      dockerfile: ./build/docker/Dockerfile.dev
+      context: .
+      args:
+        MODULE_NAME: "watcher"
+    environment:
+      <<: *watcher-env
+    volumes:
+      - .:/app
+      - godeps:/go
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_PASSWORD: rootsecret
+    volumes:
+      - ./scripts/dev/postgres/init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:8-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:
+  godeps:
+    external: true

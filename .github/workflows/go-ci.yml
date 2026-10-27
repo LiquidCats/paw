@@ -23,49 +23,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Detect changed modules
-        id: filter
-        uses: dorny/paths-filter@v4
-        with:
-          filters: |
-            lib/evm-input-parser:
-              - 'lib/evm-input-parser/**'
-              - 'go.work'
-              - 'go.work.sum'
-            lib/graceful:
-              - 'lib/graceful/**'
-              - 'go.work'
-              - 'go.work.sum'
-            lib/jsonrpc:
-              - 'lib/jsonrpc/**'
-              - 'go.work'
-              - 'go.work.sum'
-            lib/observer:
-              - 'lib/observer/**'
-              - 'go.work'
-              - 'go.work.sum'
-            lib/workers:
-              - 'lib/workers/**'
-              - 'go.work'
-              - 'go.work.sum'
-            services/kms:
-              - 'services/kms/**'
-              - 'lib/graceful/**'
-              - 'protos/**'
-              - 'go.work'
-              - 'go.work.sum'
-            services/rater:
-              - 'services/rater/**'
-              - 'lib/graceful/**'
-              - 'go.work'
-              - 'go.work.sum'
-            services/watcher:
-              - 'services/watcher/**'
-              - 'lib/graceful/**'
-              - 'lib/jsonrpc/**'
-              - 'go.work'
-              - 'go.work.sum'
-
   test:
     name: Test ${{ matrix.module }}
     needs: changes
@@ -83,7 +40,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v6
         with:
-          go-version: "1.26.4"
+          go-version: "1.27"
           cache-dependency-path: |
             **/go.mod
             **/go.sum
@@ -122,4 +79,4 @@ jobs:
             -v "${GITHUB_WORKSPACE}:/src" \
             -w "/src/${{ matrix.module }}" \
             "golangci/golangci-lint:v2.11.4-alpine" \
-            golangci-lint run ./...
+            golangci-lint run ./... --configs=${GITHUB_WORKSPACE}/.golangci.yaml

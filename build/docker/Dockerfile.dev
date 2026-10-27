@@ -1,0 +1,25 @@
+FROM golang:1.27-alpine
+
+ENV CGO_ENABLED=1
+
+
+ARG MODULE_NAME="none"
+ENV MODULE_NAME=$MODULE_NAME
+RUN apk add --no-cache build-base
+RUN go install github.com/air-verse/air@latest
+
+WORKDIR /app
+
+COPY go.mod go.sum ./
+
+RUN go mod download
+
+COPY cmd/$MODULE_NAME ./cmd/$MODULE_NAME
+COPY internal/modules/$MODULE_NAME ./internal/modules/$MODULE_NAME
+COPY internal/kernel ./internal/kernel
+COPY internal/shares ./internal/shares
+COPY pkg ./pkg
+COPY .air.toml ./
+
+
+CMD ["air", "-c", ".air.toml"]

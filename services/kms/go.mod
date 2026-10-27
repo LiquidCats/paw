@@ -3,12 +3,12 @@ module github.com/LiquidCats/paw/services/litehsm
 go 1.26.4
 
 require (
+	github.com/LiquidCats/paw/lib/database v0.0.0-20260727221241-1c796802a043
 	github.com/LiquidCats/paw/lib/graceful v0.0.0-20260701214004-c467d8d09640
 	github.com/LiquidCats/paw/protos v0.0.0-20260701214004-c467d8d09640
 	github.com/awnumar/memguard v0.23.0
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.4.1
 	github.com/goccy/go-yaml v1.19.2
-	github.com/golang-migrate/migrate/v4 v4.19.1
 	github.com/google/uuid v1.6.0
 	github.com/jackc/pgx/v5 v5.10.0
 	github.com/kelseyhightower/envconfig v1.4.0
@@ -16,7 +16,7 @@ require (
 	github.com/stretchr/testify v1.11.1
 	golang.org/x/crypto v0.53.0
 	golang.org/x/term v0.44.0
-	google.golang.org/grpc v1.82.0
+	google.golang.org/grpc v1.82.1
 	google.golang.org/protobuf v1.36.11
 	gopkg.in/yaml.v3 v3.0.1
 )
@@ -24,6 +24,7 @@ require (
 require (
 	github.com/awnumar/memcall v0.5.0 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
+	github.com/golang-migrate/migrate/v4 v4.19.1 // indirect
 	github.com/jackc/pgerrcode v0.0.0-20250907135507-afb5586c32a6 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect

@@ -14,9 +14,9 @@ require (
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/rotisserie/eris v0.5.4
 	github.com/stretchr/testify v1.11.1
-	golang.org/x/crypto v0.53.0
-	golang.org/x/term v0.44.0
-	google.golang.org/grpc v1.82.1
+	golang.org/x/crypto v0.55.0
+	golang.org/x/term v0.45.0
+	google.golang.org/grpc v1.83.2
 	google.golang.org/protobuf v1.36.11
 	gopkg.in/yaml.v3 v3.0.1
 )
@@ -37,9 +37,9 @@ require (
 	github.com/rogpeppe/go-internal v1.15.0 // indirect
 	github.com/rs/zerolog v1.34.0 // indirect
 	github.com/stretchr/objx v0.5.3 // indirect
-	golang.org/x/net v0.56.0 // indirect
-	golang.org/x/sync v0.21.0 // indirect
-	golang.org/x/sys v0.46.0 // indirect
-	golang.org/x/text v0.38.0 // indirect
+	golang.org/x/net v0.58.0 // indirect
+	golang.org/x/sync v0.22.0 // indirect
+	golang.org/x/sys v0.47.0 // indirect
+	golang.org/x/text v0.41.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260630182238-925bb5da69e7 // indirect
 )

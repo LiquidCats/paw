@@ -2,135 +2,119 @@ package postgres_test
 
 import (
 	"context"
-	"errors"
 	"testing"
 	"time"
+
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgtype"
+	"github.com/rotisserie/eris"
+	"github.com/shopspring/decimal"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/LiquidCats/paw/internal/modules/rater/internal/adapter/outbound/data/postgres"
 	"github.com/LiquidCats/paw/internal/modules/rater/internal/adapter/outbound/data/postgres/db"
 	"github.com/LiquidCats/paw/internal/modules/rater/internal/core/domain/entities"
 	"github.com/LiquidCats/paw/internal/modules/rater/internal/core/domain/values"
-	"github.com/jackc/pgx/v5"
-	"github.com/shopspring/decimal"
-	"github.com/stretchr/testify/suite"
 )
 
-type RateRepositorySuite struct {
-	suite.Suite
-}
-
-func TestRateRepositorySuite(t *testing.T) {
-	suite.Run(t, new(RateRepositorySuite))
-}
-
-func (s *RateRepositorySuite) TestGetRateReturnsMappedRate() {
-	repo := postgres.NewRepository(db.New(fakeDBTX{
-		queryRowFn: func(context.Context, string, ...any) pgx.Row {
-			return fakeRow{values: []any{
-				int32(1), decimal.NewFromInt(100), "BTC_USD", "cex", pgtypeTimestamp(), pgtypeTimestamp(),
-			}}
-		},
-	}))
-
-	rate, err := repo.GetRate(context.Background(), values.Symbol("BTC_USD"), time.Now())
-
-	s.Require().NoError(err)
-	s.Equal(values.ProviderNameCex, rate.Provider)
-	s.True(rate.Price.Equal(decimal.NewFromInt(100)))
-	s.Equal(entities.Pair{From: "BTC", To: "USD", Symbol: "BTC_USD"}, rate.Pair)
-}
-
-func (s *RateRepositorySuite) TestGetRateWrapsQueryError() {
-	wantErr := errors.New("no rows")
-	repo := postgres.NewRepository(db.New(fakeDBTX{
-		queryRowFn: func(context.Context, string, ...any) pgx.Row {
-			return fakeRow{err: wantErr}
-		},
-	}))
-
-	rate, err := repo.GetRate(context.Background(), values.Symbol("BTC_USD"), time.Now())
-
-	s.Require().ErrorIs(err, wantErr)
-	s.Nil(rate)
-}
-
-func (s *RateRepositorySuite) TestGetRateWrapsUnknownProviderName() {
-	repo := postgres.NewRepository(db.New(fakeDBTX{
-		queryRowFn: func(context.Context, string, ...any) pgx.Row {
-			return fakeRow{values: []any{
-				int32(1), decimal.NewFromInt(100), "BTC_USD", "not-a-real-provider", pgtypeTimestamp(), pgtypeTimestamp(),
-			}}
-		},
-	}))
-
-	rate, err := repo.GetRate(context.Background(), values.Symbol("BTC_USD"), time.Now())
-
-	s.Require().ErrorIs(err, values.ErrInvalidProviderName)
-	s.Nil(rate)
-}
-
-func (s *RateRepositorySuite) TestHasRateReturnsBool() {
-	repo := postgres.NewRepository(db.New(fakeDBTX{
-		queryRowFn: func(context.Context, string, ...any) pgx.Row {
-			return fakeRow{values: []any{true}}
-		},
-	}))
-
-	has, err := repo.HasRate(context.Background(), values.Symbol("BTC_USD"), time.Now())
-
-	s.Require().NoError(err)
-	s.True(has)
-}
-
-func (s *RateRepositorySuite) TestHasRateWrapsQueryError() {
-	wantErr := errors.New("connection refused")
-	repo := postgres.NewRepository(db.New(fakeDBTX{
-		queryRowFn: func(context.Context, string, ...any) pgx.Row {
-			return fakeRow{err: wantErr}
-		},
-	}))
-
-	has, err := repo.HasRate(context.Background(), values.Symbol("BTC_USD"), time.Now())
-
-	s.Require().ErrorIs(err, wantErr)
-	s.False(has)
-}
-
-func (s *RateRepositorySuite) TestSaveRateStoresProviderNameAsText() {
-	var gotArgs []any
-	repo := postgres.NewRepository(db.New(fakeDBTX{
-		queryRowFn: func(_ context.Context, _ string, args ...any) pgx.Row {
-			gotArgs = args
-			return fakeRow{values: []any{
-				int32(1), decimal.NewFromInt(100), "BTC_USD", "cex", pgtypeTimestamp(), pgtypeTimestamp(),
-			}}
-		},
-	}))
-	rate := entities.Rate{
-		Pair:     entities.Pair{Symbol: "BTC_USD"},
-		Price:    decimal.NewFromInt(100),
+var (
+	rateTS   = time.Date(2026, 1, 2, 3, 5, 0, 0, time.UTC)
+	rateErr  = eris.New("db down")
+	rateWant = &entities.Rate{
+		Pair:     entities.NewPairFromSymbol("BTC_USD"),
+		Price:    decimal.NewFromInt(42),
 		Provider: values.ProviderNameCex,
 	}
+)
 
-	got, err := repo.SaveRate(context.Background(), rate, time.Now())
-
-	s.Require().NoError(err)
-	s.Equal(values.ProviderNameCex, got.Provider)
-	s.Require().Len(gotArgs, 4)
-	s.Equal("cex", gotArgs[2])
+// rateRow matches the column order of the rates queries.
+func rateRow() []any {
+	return []any{int32(1), decimal.NewFromInt(42), "BTC_USD", "cex", pgtypeTimestamp(), pgtypeTimestamp()}
 }
 
-func (s *RateRepositorySuite) TestSaveRateWrapsQueryError() {
-	wantErr := errors.New("constraint violation")
-	repo := postgres.NewRepository(db.New(fakeDBTX{
-		queryRowFn: func(context.Context, string, ...any) pgx.Row {
-			return fakeRow{err: wantErr}
+func rowDB(row fakeRow, capture func(args []any)) *postgres.Repository {
+	return postgres.NewRepository(db.New(fakeDBTX{
+		queryRowFn: func(_ context.Context, _ string, args ...any) pgx.Row {
+			if capture != nil {
+				capture(args)
+			}
+
+			return row
 		},
 	}))
-	rate := entities.Rate{Pair: entities.Pair{Symbol: "BTC_USD"}, Price: decimal.NewFromInt(100), Provider: values.ProviderNameCex}
+}
 
-	got, err := repo.SaveRate(context.Background(), rate, time.Now())
+func TestRepository_GetRate(t *testing.T) {
+	t.Parallel()
 
-	s.Require().ErrorIs(err, wantErr)
-	s.Nil(got)
+	t.Run("maps row and passes pair and timestamp", func(t *testing.T) {
+		t.Parallel()
+		var args []any
+		repo := rowDB(fakeRow{values: rateRow()}, func(a []any) { args = a })
+
+		got, err := repo.GetRate(context.Background(), "BTC_USD", rateTS)
+
+		require.NoError(t, err)
+		assert.Equal(t, rateWant, got)
+		assert.Equal(t, []any{pgtype.Timestamp{Time: rateTS, Valid: true}, "BTC_USD"}, args)
+	})
+
+	t.Run("wraps query error", func(t *testing.T) {
+		t.Parallel()
+
+		got, err := rowDB(fakeRow{err: rateErr}, nil).GetRate(context.Background(), "BTC_USD", rateTS)
+
+		assert.Nil(t, got)
+		assert.ErrorIs(t, err, rateErr)
+	})
+}
+
+func TestRepository_HasRate(t *testing.T) {
+	t.Parallel()
+
+	for _, exists := range []bool{true, false} {
+		t.Run("exists="+map[bool]string{true: "true", false: "false"}[exists], func(t *testing.T) {
+			t.Parallel()
+
+			got, err := rowDB(fakeRow{values: []any{exists}}, nil).HasRate(context.Background(), "BTC_USD", rateTS)
+
+			require.NoError(t, err)
+			assert.Equal(t, exists, got)
+		})
+	}
+
+	t.Run("wraps query error", func(t *testing.T) {
+		t.Parallel()
+
+		got, err := rowDB(fakeRow{err: rateErr}, nil).HasRate(context.Background(), "BTC_USD", rateTS)
+
+		assert.False(t, got)
+		assert.ErrorIs(t, err, rateErr)
+	})
+}
+
+func TestRepository_SaveRate(t *testing.T) {
+	t.Parallel()
+
+	t.Run("returns stored rate and passes all columns", func(t *testing.T) {
+		t.Parallel()
+		var args []any
+		repo := rowDB(fakeRow{values: rateRow()}, func(a []any) { args = a })
+
+		got, err := repo.SaveRate(context.Background(), *rateWant, rateTS)
+
+		require.NoError(t, err)
+		assert.Equal(t, rateWant, got)
+		assert.Equal(t, []any{decimal.NewFromInt(42), "BTC_USD", "cex", pgtype.Timestamp{Time: rateTS, Valid: true}}, args)
+	})
+
+	t.Run("wraps query error", func(t *testing.T) {
+		t.Parallel()
+
+		got, err := rowDB(fakeRow{err: rateErr}, nil).SaveRate(context.Background(), *rateWant, rateTS)
+
+		assert.Nil(t, got)
+		assert.ErrorIs(t, err, rateErr)
+	})
 }

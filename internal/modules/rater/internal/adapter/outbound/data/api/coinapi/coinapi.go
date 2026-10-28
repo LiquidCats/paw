@@ -18,10 +18,10 @@ import (
 )
 
 type Repository struct {
-	cfg config.CoinApiConfig
+	cfg config.ProviderConfig
 }
 
-func NewRepository(cfg config.CoinApiConfig) *Repository {
+func NewRepository(cfg config.ProviderConfig) *Repository {
 	return &Repository{
 		cfg: cfg,
 	}
@@ -50,7 +50,9 @@ func (r *Repository) GetRate(ctx context.Context, pair entities.Pair) (decimal.D
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("X-CoinAPI-Key", string(r.cfg.Secret)) //nolint:canonicalheader
+	if r.cfg.Secret != nil {
+		req.Header.Set("X-CoinAPI-Key", string(*r.cfg.Secret))
+	}
 
 	res, err := http.DefaultClient.Do(req) //nolint:gosec
 	if err != nil {

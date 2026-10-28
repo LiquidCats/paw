@@ -1,18 +1,33 @@
-package timeutils
+package clock
 
-import "time"
+import (
+	"time"
 
-const (
-	FiveMinuteBucket int = 5
+	"github.com/LiquidCats/paw/internal/kernel/domain/values"
+	"github.com/LiquidCats/paw/internal/kernel/ports"
 )
 
-// RoundToNearest rounds a time to the nearest 5-minute interval.
-func RoundToNearest(t time.Time, b int) time.Time {
+var _ ports.Clock = (*Clock)(nil)
+
+type Clock struct {
+}
+
+func NewClock() *Clock {
+	return &Clock{}
+}
+
+// Now implements [ports.Clock].
+func (c *Clock) Now() time.Time {
+	return time.Now()
+}
+
+// RoundToNearest implements [ports.Clock].
+func (c *Clock) RoundToNearest(t time.Time, b values.ClockBucket) time.Time {
 	// Get the minute component
 	minute := t.Minute()
 
 	// Calculate the remainder when divided by 5
-	remainder := minute % b
+	remainder := minute % int(b)
 
 	// Determine whether to round up or down
 	var roundedMinute int

@@ -6,43 +6,40 @@ import (
 	"os"
 
 	"github.com/redis/go-redis/v9"
-	"github.com/rotisserie/eris"
-	"github.com/rs/zerolog"
 
 	"github.com/LiquidCats/libraries/cfg"
 	"github.com/LiquidCats/libraries/db/postgres"
 	"github.com/LiquidCats/paw/internal/config"
+	"github.com/LiquidCats/paw/internal/kernel/ports"
 	"github.com/LiquidCats/paw/internal/modules/rater/bootstrap"
+	"github.com/LiquidCats/paw/internal/modules/rater/migrations"
+	"github.com/LiquidCats/paw/internal/shares/logs"
 )
 
 func main() {
-	logger := zerolog.New(os.Stdout).
-		With().
-		Caller().
-		Stack().
-		Timestamp().
-		Logger()
-
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	redisCfg, err := cfg.Load[config.RedisConfig]()
+	redisCfg, err := cfg.Load[config.RedisConfig](cfg.WithPrefix("redis"))
 	if err != nil {
-		logger.Panic().Err(err).Msg("failed to load redis config")
+		panic(err)
 	}
-	pgCfg, err := cfg.Load[config.PostgresConfig]()
+	pgCfg, err := cfg.Load[config.PostgresConfig](cfg.WithPrefix("database"))
 	if err != nil {
-		logger.Panic().Err(err).Msg("failed to load postgres config")
+		panic(err)
 	}
-	zerologCfg, err := cfg.Load[config.ZerologConfig]()
+	zerologCfg, err := cfg.Load[config.ZerologConfig](cfg.WithPrefix("logging"))
 	if err != nil {
-		logger.Panic().Err(err).Msg("failed to load zerolog config")
+		panic(err)
 	}
 
-	ctx = logger.WithContext(ctx)
-
-	zerolog.DefaultContextLogger = &logger // nolint:reassign
-	zerolog.SetGlobalLevel(zerologCfg.Level)
+	logger := logs.NewZerologAdapter(
+		os.Stdout,
+		logs.WithCaller(),
+		logs.WithStack(),
+		logs.WithTimestamp(),
+		logs.WithLevel(zerologCfg.Level),
+	)
 
 	pool, err := postgres.Connect(
 		ctx,
@@ -55,11 +52,17 @@ func main() {
 	)
 
 	if err != nil {
-		logger.Panic().
-			Any("err", eris.ToJSON(err, true)).
-			Msg("connect to database")
+		logger.Panic("connect to database", ports.Err(err))
 	}
 	defer pool.Close()
+
+	logger.Info("connected to database")
+
+	err = postgres.MigrateUp(ctx, pool, migrations.FS)
+	if err != nil {
+		logger.Panic("database migration failed", ports.Err(err))
+	}
+	logger.Info("database migrated")
 
 	redisClient := redis.NewClient(&redis.Options{
 		Addr:     net.JoinHostPort(redisCfg.Host, redisCfg.Port),
@@ -68,6 +71,8 @@ func main() {
 		Password: string(redisCfg.Password),
 	})
 	defer redisClient.Close()
+
+	logger.Info("connected to redis")
 
 	bootstrap.Bootstrap(ctx, logger, pool, redisClient)
 }

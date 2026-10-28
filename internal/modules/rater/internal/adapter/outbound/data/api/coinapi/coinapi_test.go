@@ -26,9 +26,9 @@ func TestCoinApiRepository_Get(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	repo := coinapi.NewRepository(config.CoinApiConfig{
+	repo := coinapi.NewRepository(config.ProviderConfig{
 		URL:    ts.URL,
-		Secret: "test1234",
+		Secret: new("test1234"),
 	})
 
 	rate, err := repo.GetRate(t.Context(), entities.Pair{

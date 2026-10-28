@@ -13,21 +13,21 @@ import (
 
 	"github.com/LiquidCats/paw/internal/modules/rater/internal/adapter/outbound/data/api/coinmarketcap/dto"
 	"github.com/LiquidCats/paw/internal/modules/rater/internal/config"
-	entity "github.com/LiquidCats/paw/internal/modules/rater/internal/core/domain/entities"
+	"github.com/LiquidCats/paw/internal/modules/rater/internal/core/domain/entities"
 	"github.com/LiquidCats/paw/internal/modules/rater/internal/core/domain/errors"
 )
 
 type Repository struct {
-	cfg config.CoinMarketCapConfig
+	cfg config.ProviderConfig
 }
 
-func NewRepository(cfg config.CoinMarketCapConfig) *Repository {
+func NewRepository(cfg config.ProviderConfig) *Repository {
 	return &Repository{
 		cfg: cfg,
 	}
 }
 
-func (r *Repository) GetRate(ctx context.Context, pair entity.Pair) (decimal.Decimal, error) {
+func (r *Repository) GetRate(ctx context.Context, pair entities.Pair) (decimal.Decimal, error) {
 	fullURL := fmt.Sprintf(
 		"%s?amount=1&symbol=%s&convert=%s",
 		r.cfg.URL,
@@ -50,9 +50,11 @@ func (r *Repository) GetRate(ctx context.Context, pair entity.Pair) (decimal.Dec
 	}
 
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("X-CMC_PRO_API_KEY", string(r.cfg.Secret)) //nolint:canonicalheader
+	if r.cfg.Secret != nil {
+		req.Header.Set("X-Cmc_pro_api_key", *r.cfg.Secret)
+	}
 
-	res, err := http.DefaultClient.Do(req) //nolint:gosec
+	res, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return decimal.Zero, eris.Wrap(err, "repo: error making http request")
 	}
@@ -81,7 +83,7 @@ func (r *Repository) GetRate(ctx context.Context, pair entity.Pair) (decimal.Dec
 
 	quotePrice, ok := response.Data.Quote[pair.To.ToUpper().String()]
 	if !ok {
-		return decimal.Zero, eris.Wrap(err, "repo: could not parse response")
+		return decimal.Zero, eris.New("repo: could not find quote in response")
 	}
 
 	return decimal.NewFromFloat(quotePrice.Price), nil

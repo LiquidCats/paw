@@ -6,9 +6,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/LiquidCats/paw/internal/modules/rater/internal/core/domain/entities"
+	"github.com/redis/go-redis/v9"
 	"github.com/rotisserie/eris"
 	"github.com/shopspring/decimal"
+
+	"github.com/LiquidCats/paw/internal/modules/rater/internal/core/domain/entities"
 )
 
 const defaultRateKeyExpiration = 5 * time.Second
@@ -35,11 +37,14 @@ func (p RateKey) String() string {
 	)
 }
 
-
 func (r *Repository) GetRate(ctx context.Context, pair entities.Pair) (*entities.Rate, error) {
 	key := newRateKey(pair)
 	price, err := r.client.Get(ctx, key.String()).Result()
-	if err != nil  {
+	if err != nil {
+		if eris.Is(err, redis.Nil) {
+			return nil, entities.ErrRateNotFound
+		}
+
 		return nil, eris.Wrap(err, "failed to get rate from redis")
 	}
 

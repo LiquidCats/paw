@@ -15,10 +15,10 @@ import (
 )
 
 type Repository struct {
-	cfg config.CoinGateConfig
+	cfg config.ProviderConfig
 }
 
-func NewRepository(cfg config.CoinGateConfig) *Repository {
+func NewRepository(cfg config.ProviderConfig) *Repository {
 	return &Repository{
 		cfg: cfg,
 	}

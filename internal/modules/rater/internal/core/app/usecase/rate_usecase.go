@@ -7,36 +7,43 @@ import (
 	"github.com/rotisserie/eris"
 	"github.com/rs/zerolog"
 
+	kernelvalues "github.com/LiquidCats/paw/internal/kernel/domain/values"
+	"github.com/LiquidCats/paw/internal/kernel/ports"
 	"github.com/LiquidCats/paw/internal/modules/rater/internal/core/app/port/inbound"
 	"github.com/LiquidCats/paw/internal/modules/rater/internal/core/app/port/outbound"
-	"github.com/LiquidCats/paw/internal/modules/rater/internal/core/app/timeutils"
 	"github.com/LiquidCats/paw/internal/modules/rater/internal/core/domain/entities"
 	"github.com/LiquidCats/paw/internal/modules/rater/internal/core/domain/values"
 )
 
 type RateUseCase struct {
+	logger          ports.Logger
 	cacheRepositroy outbound.RateCacheRepository
 	rateService     inbound.RateService
+	clock           ports.Clock
 }
 
 func NewRateUseCase(
+	logger ports.Logger,
+	clock ports.Clock,
 	cacheRepositroy outbound.RateCacheRepository,
 	rateService inbound.RateService,
 ) *RateUseCase {
 	return &RateUseCase{
+		logger:          logger,
+		clock:           clock,
 		cacheRepositroy: cacheRepositroy,
 		rateService:     rateService,
 	}
 }
 
-func (e *RateUseCase) CollectRate(ctx context.Context, symbol values.Symbol) error {
+func (uc *RateUseCase) CollectRate(ctx context.Context, symbol values.Symbol) error {
 	logger := zerolog.Ctx(ctx).
 		With().
 		Str("name", "use_case.collect_rate").
 		Any("symbol", symbol).
 		Logger()
 
-	rate, provider, err := e.rateService.Current(ctx, entities.NewPairFromSymbol(symbol))
+	rate, provider, err := uc.rateService.Current(ctx, entities.NewPairFromSymbol(symbol))
 	if err != nil {
 		logger.Error().
 			Any("err", eris.ToJSON(err, true)).
@@ -54,24 +61,21 @@ func (e *RateUseCase) CollectRate(ctx context.Context, symbol values.Symbol) err
 	return nil
 }
 
-func (e *RateUseCase) GetRate(ctx context.Context, symbol values.Symbol, date time.Time) (*entities.Rate, error) {
-	logger := zerolog.Ctx(ctx).
-		With().
-		Str("name", "use_case.get_rate").
-		Any("symbol", symbol).
-		Logger()
+func (uc *RateUseCase) GetRate(ctx context.Context, symbol values.Symbol, date time.Time) (*entities.Rate, error) {
+	logger := uc.logger.With(
+		ports.Str("name", "use_case.get_rate"),
+		ports.Of[string]("symbol", symbol.String()),
+	)
 
 	pairEntity := entities.NewPairFromSymbol(symbol)
-	logger.Debug().Msg("get rate")
+	logger.Debug("get rate")
 
-	ts := timeutils.RoundToNearest(date, timeutils.FiveMinuteBucket)
+	ts := uc.clock.RoundToNearest(date, kernelvalues.FiveMinuteBucket)
 
-	if ts.Compare(timeutils.RoundToNearest(time.Now(), timeutils.FiveMinuteBucket)) < 0 {
-		rate, err := e.rateService.Historical(ctx, pairEntity, ts)
+	if ts.Compare(uc.clock.RoundToNearest(time.Now(), kernelvalues.FiveMinuteBucket)) < 0 {
+		rate, err := uc.rateService.Historical(ctx, pairEntity, ts)
 		if err != nil {
-			logger.Error().
-				Any("err", eris.ToJSON(err, true)).
-				Msg("get historical rate")
+			logger.Error("get historical rate", ports.Err(err))
 
 			return nil, err
 		}
@@ -79,30 +83,28 @@ func (e *RateUseCase) GetRate(ctx context.Context, symbol values.Symbol, date ti
 		return rate, nil
 	}
 
-	rate, err := e.cacheRepositroy.GetRate(ctx, pairEntity)
-	if err != nil {
-		logger.Error().
-			Any("err", eris.ToJSON(err, true)).
-			Msg("cant get rate value from cache")
+	rate, err := uc.cacheRepositroy.GetRate(ctx, pairEntity)
+	if err != nil && !eris.Is(err, entities.ErrRateNotFound) {
+		logger.Error("cant get rate value from cache", ports.Err(err))
 	}
 
 	if rate != nil {
 		return rate, nil
 	}
 
-	rate, provider, err := e.rateService.Current(ctx, pairEntity)
+	rate, provider, err := uc.rateService.Current(ctx, pairEntity)
 	if err != nil {
-		logger.Error().
-			Any("err", eris.ToJSON(err, true)).
-			Any("provider", provider).
-			Msg("cant get rate")
+		logger.Error("cant get rate", ports.Err(err), ports.Any("provider", provider))
+
+		return nil, err
 	}
 
-	if err = e.cacheRepositroy.PutRate(ctx, *rate); nil != err {
-		logger.Error().
-			Any("err", eris.ToJSON(err, true)).
-			Any("provider", provider).
-			Msg("cant put rate value into cache")
+	if err = uc.cacheRepositroy.PutRate(ctx, *rate); nil != err {
+		logger.Error(
+			"cant put rate value into cache",
+			ports.Err(err),
+			ports.Any("provider", provider),
+		)
 
 		return nil, err
 	}

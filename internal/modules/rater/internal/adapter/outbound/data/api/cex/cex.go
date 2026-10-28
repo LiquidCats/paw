@@ -1,9 +1,9 @@
 package cex
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"net/url"
@@ -18,22 +18,22 @@ import (
 )
 
 type Repository struct {
-	cfg config.CexConfig
+	cfg config.ProviderConfig
 }
 
-func NewRepository(cfg config.CexConfig) *Repository {
+func NewRepository(cfg config.ProviderConfig) *Repository {
 	return &Repository{cfg: cfg}
 }
 
 func (r *Repository) GetRate(ctx context.Context, pair entities.Pair) (decimal.Decimal, error) {
-	body := dto.APIRequest{Pairs: []string{pair.Join("-")}}
-
-	bodyByres, err := json.Marshal(body)
-	if err != nil {
-		return decimal.Zero, eris.Wrap(err, "repo: incorrect request body")
-	}
-
-	parsedURL, err := url.ParseRequestURI(r.cfg.URL)
+	parsedURL, err := url.ParseRequestURI(
+		fmt.Sprintf(
+			"%s/%s/%s",
+			r.cfg.URL,
+			pair.From,
+			pair.To,
+		),
+	)
 	if err != nil {
 		return decimal.Zero, eris.Wrap(err, "repo: incorrect request url")
 	}
@@ -42,7 +42,7 @@ func (r *Repository) GetRate(ctx context.Context, pair entities.Pair) (decimal.D
 		return decimal.Zero, eris.New("repo: unsupported URL scheme")
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, parsedURL.String(), bytes.NewBuffer(bodyByres))
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, parsedURL.String(), nil)
 	if err != nil {
 		return decimal.Zero, eris.Wrap(err, "repo: could not create request")
 	}
@@ -74,12 +74,7 @@ func (r *Repository) GetRate(ctx context.Context, pair entities.Pair) (decimal.D
 		return decimal.Zero, eris.Wrap(err, "repo: could not unmarshal response")
 	}
 
-	tickerInfo, ok := resp.Data[body.Pairs[0]]
-	if !ok {
-		return decimal.Zero, eris.Wrap(err, "repo: could not unmarshal response")
-	}
-
-	value, err := decimal.NewFromString(tickerInfo.LastTradePrice)
+	value, err := decimal.NewFromString(resp.Last)
 	if err != nil {
 		return decimal.Zero, eris.Wrap(err, "repo: could not parse value")
 	}

@@ -1,7 +1,6 @@
 package cex_test
 
 import (
-	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -10,31 +9,38 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/LiquidCats/paw/internal/modules/rater/internal/adapter/outbound/data/api/cex"
-	"github.com/LiquidCats/paw/internal/modules/rater/internal/adapter/outbound/data/api/cex/dto"
 	"github.com/LiquidCats/paw/internal/modules/rater/internal/config"
 	"github.com/LiquidCats/paw/internal/modules/rater/internal/core/domain/entities"
 )
 
-const response = `{"ok":"ok","data":{"BTC-USD":{"bestBid":"66786.9","bestAsk":"66842.7","bestBidChange":"-3353.0","bestBidChangePercentage":"-4.78","bestAskChange":"-3310.2","bestAskChangePercentage":"-4.71","low":"65465.0","high":"71221.5","volume30d":"231.72466546","lastTradeDateISO":"2024-04-12T19:21:07.446Z","volume":"9.27624555","quoteVolume":"639276.97927628","lastTradeVolume":"0.00000458","volumeUSD":"639276.97","last":"66842.7","lastTradePrice":"66830.7","priceChange":"-3310.2","priceChangePercentage":"-4.71"}}}`
+const response = `{
+  "timestamp": "12345678",
+  "low": "66830.7",
+  "high": "66830.7",
+  "last": "66830.7",
+  "volume": "0.10000000",
+  "volume30d": "1234.00000200",
+  "bid": 1234.12,
+  "ask": 1234.12,
+  "priceChange": "-2058.3",
+  "priceChangePercentage": "-9.18",
+  "pair": "BTC:USD"
+}`
 
 func TestRepository_Get(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, http.MethodPost, r.Method)
-
-		var req dto.APIRequest
-
-		err := json.NewDecoder(r.Body).Decode(&req)
-		assert.NoError(t, err)
-
-		assert.Contains(t, req.Pairs, "BTC-USD")
+		assert.Equal(t, http.MethodGet, r.Method)
+		assert.Contains(t, r.URL.Path, "BTC/USD")
 
 		w.WriteHeader(http.StatusOK)
-		_, err = w.Write([]byte(response))
+		_, err := w.Write([]byte(response))
 		assert.NoError(t, err)
 	}))
 	defer ts.Close()
 
-	repo := cex.NewRepository(config.CexConfig{URL: ts.URL})
+	repo := cex.NewRepository(config.ProviderConfig{
+		URL: ts.URL,
+	})
 
 	ctx := t.Context()
 

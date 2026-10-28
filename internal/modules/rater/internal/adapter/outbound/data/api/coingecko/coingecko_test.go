@@ -24,7 +24,7 @@ func TestCoinGateRepository_Get(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	repo := coingecko.NewRepository(config.CoinGeckoConfig{
+	repo := coingecko.NewRepository(config.ProviderConfig{
 		URL: ts.URL,
 	})
 

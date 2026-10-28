@@ -24,9 +24,9 @@ func TestCoinmarketcapRepository_Get(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	repo := coinmarketcap.NewRepository(config.CoinMarketCapConfig{
+	repo := coinmarketcap.NewRepository(config.ProviderConfig{
 		URL:    ts.URL,
-		Secret: "test",
+		Secret: new("test"),
 	})
 
 	rate, err := repo.GetRate(t.Context(), entity.Pair{

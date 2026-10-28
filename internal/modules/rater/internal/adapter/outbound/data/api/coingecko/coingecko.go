@@ -18,10 +18,10 @@ import (
 )
 
 type Repository struct {
-	cfg config.CoinGeckoConfig
+	cfg config.ProviderConfig
 }
 
-func NewRepository(cfg config.CoinGeckoConfig) *Repository {
+func NewRepository(cfg config.ProviderConfig) *Repository {
 	return &Repository{
 		cfg: cfg,
 	}

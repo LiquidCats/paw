@@ -24,7 +24,7 @@ func TestCoinGateRepository_Get(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	repo := coingate.NewRepository(config.CoinGateConfig{
+	repo := coingate.NewRepository(config.ProviderConfig{
 		URL: ts.URL,
 	})
 

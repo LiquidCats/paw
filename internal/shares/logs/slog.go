@@ -133,9 +133,14 @@ func (s *SlogAdapter) Panic(msg string, fields ...ports.Field) {
 }
 
 // With implements [ports.Logger].
-func (s *SlogAdapter) With(field ports.Field) ports.Logger {
+func (s *SlogAdapter) With(fields ...ports.Field) ports.Logger {
+	args := make([]any, len(fields))
+	for i := range fields {
+		args[i] = s.attr(&fields[i])
+	}
+
 	return &SlogAdapter{
-		logger: s.logger.With(s.attr(&field)),
+		logger: s.logger.With(args...),
 		caller: s.caller,
 		stack:  s.stack,
 		stamp:  s.stamp,

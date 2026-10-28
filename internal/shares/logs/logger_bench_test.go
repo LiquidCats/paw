@@ -50,10 +50,9 @@ func benchError[L ports.Logger](b *testing.B, newL constructor[L]) {
 
 func benchWith[L ports.Logger](b *testing.B, newL constructor[L]) {
 	l := build(newL)
-	f := ports.Str("mod", "x")
 	b.ReportAllocs()
 	for b.Loop() {
-		_ = l.With(f)
+		_ = l.With(ports.Str("mod", "x"), ports.Int("n", 1))
 	}
 }
 

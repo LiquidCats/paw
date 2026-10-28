@@ -6,5 +6,5 @@ type Logger interface {
 	Warn(msg string, fields ...Field)
 	Error(msg string, fields ...Field)
 	Panic(msg string, fields ...Field)
-	With(field Field) Logger
+	With(fields ...Field) Logger
 }

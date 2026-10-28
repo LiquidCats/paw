@@ -1,6 +1,7 @@
 package ports
 
 import (
+	"fmt"
 	"math"
 	"time"
 )
@@ -17,6 +18,7 @@ const (
 	KindBool
 	KindDur
 	KindErr
+	KindStringer
 )
 
 // Field is a log key/value passed by value, so a call through [Logger] costs
@@ -61,6 +63,9 @@ func Of[T Scalar](key string, v T) Field {
 func Any(key string, v any) Field { return Field{key: key, kind: KindAny, val: v} }
 func Err(err error) Field         { return Field{key: "err", kind: KindErr, val: err} }
 func Str(key, v string) Field     { return Field{key: key, kind: KindStr, str: v} }
+func Stringer(key string, v fmt.Stringer) Field {
+	return Field{key: key, kind: KindStringer, str: v.String()}
+}
 func Int(key string, v int) Field { return Field{key: key, kind: KindInt, num: uint64(int64(v))} }
 func Int64(key string, v int64) Field {
 	return Field{key: key, kind: KindInt, num: uint64(v)}
@@ -105,6 +110,8 @@ func (f Field) Value() any {
 		return f.Bool()
 	case KindDur:
 		return f.Dur()
+	case KindStringer:
+		return f.str
 	case KindAny, KindErr:
 		return f.val
 	}

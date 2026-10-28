@@ -142,17 +142,19 @@ func (z *ZerologAdapter) Warn(msg string, fields ...ports.Field) {
 // fieldObject lets With reuse the Event switch via Context.EmbedObject.
 type fieldObject struct {
 	z *ZerologAdapter
-	f ports.Field
+	f []ports.Field
 }
 
 func (f fieldObject) MarshalZerologObject(e *zerolog.Event) {
-	f.z.fields(e, []ports.Field{f.f})
+	f.z.fields(e, f.f)
 }
 
 // With implements [ports.Logger].
-func (z *ZerologAdapter) With(field ports.Field) ports.Logger {
+func (z *ZerologAdapter) With(fields ...ports.Field) ports.Logger {
 	return &ZerologAdapter{
-		logger: z.logger.With().EmbedObject(fieldObject{z: z, f: field}).Logger(),
-		stack:  z.stack,
+		logger: z.logger.With().
+			EmbedObject(fieldObject{z: z, f: fields}).
+			Logger(),
+		stack: z.stack,
 	}
 }

@@ -45,6 +45,14 @@ func conformance[L ports.Logger](t *testing.T, newL constructor[L], durNanos str
 		assertContains(t, buf.String(), `"mod":"x"`, `"n":1`, `"err":"boom"`, `logger_test.go`)
 	})
 
+	t.Run("with many fields", func(t *testing.T) {
+		var buf bytes.Buffer
+		var l ports.Logger = newL(&buf)
+
+		l.With(ports.Str("a", "1"), ports.Int("b", 2)).With().Info("m", ports.Bool("c", true))
+		assertContains(t, buf.String(), `"a":"1"`, `"b":2`, `"c":true`)
+	})
+
 	t.Run("typed fields", func(t *testing.T) {
 		var buf bytes.Buffer
 		var l ports.Logger = newL(&buf)

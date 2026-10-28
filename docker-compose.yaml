@@ -22,11 +22,15 @@ services:
       context: .
       args:
         MODULE_NAME: "rater"
+    labels:
+      - dev.orbstack.https-port=50051
     environment:
       <<: *rater-env
     volumes:
       - .:/app
       - godeps:/go
+    ports:
+      - "50051:50051"
     depends_on:
       postgres:
         condition: service_healthy

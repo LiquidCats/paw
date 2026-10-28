@@ -2,14 +2,14 @@ version: "2"
 sql:
   - engine: "postgresql"
     queries: "internal/modules/rater/internal/adapter/outbound/data/postgres/queries"
-    schema: "internal/modules/rater/internal/migrations"
+    schema: "internal/modules/rater/migrations"
     gen:
       go:
         package: "db"
         out: "internal/modules/rater/internal/adapter/outbound/data/postgres/db"
         sql_package: "pgx/v5"
         overrides:
-          - db_type: "pg_catalog.numeric"   # see note below re Postgres
+          - db_type: "pg_catalog.numeric" # see note below re Postgres
             go_type: "github.com/shopspring/decimal.Decimal"
           # Optional: handle nullable numeric
           - db_type: "pg_catalog.numeric"

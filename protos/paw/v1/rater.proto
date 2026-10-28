@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package paw.v1;
+
+option go_package = "github.com/LiquidCats/paw/pkg/paw/v1;pawv1";
+
+service RaterService {
+  rpc GetRate(GetRateRequest) returns (GetRateResponse);
+}
+
+message Pair {
+  string from = 1;
+  string to = 2;
+  string symbol = 3;
+}
+
+message GetRateRequest {
+  string symbol = 1;
+  optional string date = 2;
+}
+
+message GetRateResponse {
+  Pair pair = 1;
+  string price = 2;
+}

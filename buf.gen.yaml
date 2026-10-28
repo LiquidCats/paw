@@ -1,12 +1,13 @@
 version: v2
+clean: true
 inputs:
   - directory: /defs/protos
 plugins:
-  - remote: buf.build/protocolbuffers/go
-    out: /defs/pkg/grpc
+  - remote: buf.build/protocolbuffers/go:v1.36.11
+    out: /defs/pkg
     opt:
       - paths=source_relative
   - remote: buf.build/grpc/go
-    out: /defs/pkg/grpc
+    out: /defs/pkg
     opt:
       - paths=source_relative

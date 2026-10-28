@@ -1,0 +1,22 @@
+providers:
+  - enabled: false
+    name: coingate
+    url: https://api.coingate.com/v2/rates/merchant
+
+  - enabled: true
+    name: cex
+    url: https://cex.io/api/ticker
+
+  - enabled: false
+    name: coingecko
+    url: https://api.coingecko.com/api/v3/simple/price
+
+  - enabled: false
+    name: coinapi
+    url: https://rest.coinapi.io/v1/exchangerate
+    secret: "**REMOVED**"
+
+  - enabled: false
+    name: coinmarketcap
+    url: https://pro-api.coinmarketcap.com/v1/tools/price-conversion
+    secret: "**REMOVED**"

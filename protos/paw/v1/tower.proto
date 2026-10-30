@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package paw.v1;
+
+import "paw/v1/common.proto";
+
+option go_package = "github.com/LiquidCats/paw/pkg/paw/v1;pawv1";
+
+service TowerService {
+  rpc SubmitActivity(SubmitActivityRequest) returns (SubmitActivityResponse);
+}
+
+message SubmitActivityRequest {
+  string tower_id = 1;
+  uint64 timestamp_ms = 2;
+  ActivityAction action = 3;
+  ActivityResource resource = 4;
+  Intent intent = 5;
+  Stamp stamp = 6;
+}
+
+message SubmitActivityResponse {
+  string id = 1;
+  string tower_id = 2;
+  uint64 timestamp_ms = 3;
+  ActivityStatus status = 4;
+  ActivityAction action = 5;
+  ActivityResource resource = 6;
+  Intent intent = 7;
+  uint64 created_at_ms = 8;
+  uint64 updated_at_ms = 9;
+}

@@ -5,6 +5,7 @@ import (
 
 	"github.com/rotisserie/eris"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	domainerrors "github.com/LiquidCats/paw/internal/modules/rater/internal/core/domain/errors"
 )
@@ -14,7 +15,7 @@ func TestProviderRequestFailedError(t *testing.T) {
 
 	err := &domainerrors.ProviderRequestFailedError{StatusCode: 503, Body: "down"}
 
-	assert.EqualError(t, err, "provider request failed with code 503")
+	require.EqualError(t, err, "provider request failed with code 503")
 
 	var target *domainerrors.ProviderRequestFailedError
 	require := assert.New(t)

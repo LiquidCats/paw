@@ -43,7 +43,7 @@ proto-lint: ## Lint protobuf definitions
 		-w /defs \
 		"$(BUF_IMAGE)" lint
 
-proto-generate: proto-clean ## Generate protobuf code
+generate-proto: proto-clean ## Generate protobuf code
 	$(CONTAINER_RUNTIME) run --rm \
 		-v "$(ROOT_DIR):/defs" \
 		-w /defs \

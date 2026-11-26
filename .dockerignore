@@ -1,0 +1,13 @@
+.git
+.idea
+.claude
+.vscode
+tmp
+**/.env
+**/.env.*
+**/*.key
+**/*.secret
+**/*.test
+**/*.out
+result
+result-*

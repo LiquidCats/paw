@@ -1,0 +1,267 @@
+syntax = "proto3";
+
+package paw.v1;
+
+option go_package = "github.com/LiquidCats/paw/pkg/paw/v1;pawv1";
+
+enum ActivityAction {
+  ACTIVITY_ACTION_UNSPECIFIED = 0;
+  ACTIVITY_ACTION_CREATE = 1;
+  ACTIVITY_ACTION_UPDATE = 2;
+  ACTIVITY_ACTION_DELETE = 3;
+
+  ACTIVITY_ACTION_SIGN = 4;
+  ACTIVITY_ACTION_EXPORT = 5;
+  ACTIVITY_ACTION_IMPORT = 6;
+  ACTIVITY_ACTION_VERIFY = 7;
+  ACTIVITY_ACTION_ENCRYPT = 8;
+}
+
+enum ActivityResource {
+  ACTIVITY_RESOURCE_UNSPECIFIED = 0;
+  ACTIVITY_RESOURCE_TOWER = 1;
+  ACTIVITY_RESOURCE_USER = 2;
+  ACTIVITY_RESOURCE_POLICY = 3;
+  ACTIVITY_RESOURCE_TRANSACTION = 4;
+  ACTIVITY_RESOURCE_WALLET = 5;
+  ACTIVITY_RESOURCE_ADDRESS = 6;
+}
+
+enum ActivityStatus {
+  ACTIVITY_STATUS_UNSPECIFIED = 0;
+  ACTIVITY_STATUS_PENDING = 1;
+  ACTIVITY_STATUS_COMPLETED = 2;
+  ACTIVITY_STATUS_FAILED = 3;
+  ACTIVITY_STATUS_REJECTED = 4;
+}
+
+enum DigestType {
+  DIGEST_TYPE_UNSPECIFIED = 0;
+  DIGEST_TYPE_SHA256 = 1;
+  DIGEST_TYPE_SHA512 = 2;
+}
+
+enum FingerprintType {
+  FINGERPRINT_TYPE_UNSPECIFIED = 0;
+  FINGERPRINT_TYPE_ED25519 = 1;
+  FINGERPRINT_TYPE_P256 = 2;
+}
+
+enum CredentialType {
+  CREDENTIAL_TYPE_UNSPECIFIED = 0;
+  CREDENTIAL_TYPE_PASSKEY = 1;
+  CREDENTIAL_TYPE_PUBLIC_KEY = 2;
+}
+
+enum PolicyEffectType {
+  POLICY_EFFECT_TYPE_UNSPECIFIED = 0;
+  POLICY_EFFECT_TYPE_ALLOW = 1;
+  POLICY_EFFECT_TYPE_DENY = 2;
+}
+
+enum SeedEncryptionAlgoType {
+  SEED_ENCRYPTION_ALGO_TYPE_UNSPECIFIED = 0;
+  SEED_ENCRYPTION_ALGO_TYPE_XCHACHA20_POLY1305 = 1;
+}
+
+enum BitcoinTxLocktimeType {
+  BITCOIN_TX_LOCKTIME_TYPE_UNSPECIFIED = 0;
+  BITCOIN_TX_LOCKTIME_TYPE_BLOCK_HEIGHT = 1;
+  BITCOIN_TX_LOCKTIME_TYPE_TIMESTAMP = 2;
+}
+
+enum UserRole {
+  USER_ROLE_UNSPECIFIED = 0;
+  USER_ROLE_ADMIN = 1;
+  USER_ROLE_MEMBER = 2;
+}
+
+message Stamp {
+  bytes digest = 1;
+  bytes fingprint = 2;
+  DigestType digest_type = 3;
+  FingerprintType fingerprint_type = 4;
+}
+
+message Envelope {
+  message KDF {
+    string name = 1;
+    bytes salt = 2;
+    uint32 time = 3;
+    uint32 memory_kib = 4;
+    uint32 threads = 5;
+  }
+  message WrappedDEK {
+    string alg = 1;
+    bytes nonce = 2;
+    bytes ciphertext = 3;
+  }
+  message Payload {
+    string alg = 1;
+    bytes nonce = 2;
+    bytes ciphertext = 3;
+  }
+
+  uint64 version = 1;
+  optional KDF kdf = 2;
+  WrappedDEK wrapped_dek = 3;
+  Payload payload = 4;
+}
+
+message StampedTower {
+  message User {
+    string id = 1;
+    string tower_id = 2;
+    string email = 3;
+    UserRole role = 4;
+  }
+  message Credential {
+    string id = 1;
+    string tower_id = 2;
+    string user_id = 3;
+    CredentialType type = 4;
+    bytes value = 5;
+  }
+  message Wallet {
+    uint32 index = 1;
+    string tower_id = 2;
+  }
+  message Policy {
+    string id = 1;
+    string tower_id = 2;
+    string condition = 3;
+    string consensus = 4;
+    PolicyEffectType effect = 5;
+  }
+  message Seed {
+    string tower_id = 1;
+    Envelope envelope = 2;
+  }
+  string id = 1;
+  string name = 2;
+  uint64 version = 3;
+  uint32 consensus = 4;
+  Seed seed = 5;
+  repeated User users = 6;
+  repeated Credential credentials = 7;
+  repeated Wallet wallets = 8;
+  repeated Policy policies = 9;
+}
+
+message Intent {
+  message CreateTower {
+    message User {
+      string email = 2;
+    }
+    message Credential {
+      CredentialType type = 1;
+      bytes value = 2;
+    }
+    string name = 1;
+    User user = 2;
+    Credential credential = 3;
+  }
+
+  message CreateUser {
+    string email = 1;
+    string name = 2;
+    UserRole role = 4;
+  }
+  message UpdateUser {
+    string id = 1;
+    string name = 2;
+    UserRole role = 3;
+  }
+  message DeleteUser {
+    string id = 1;
+  }
+
+  message CreatePolicy {
+    string name = 1;
+    string description = 2;
+    string condition = 3;
+    string consensus = 4;
+    PolicyEffectType effect = 5;
+  }
+  message UpdatePolicy {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    string condition = 4;
+    string consensus = 5;
+    PolicyEffectType effect = 6;
+  }
+  message DeletePolicy {
+    string id = 1;
+  }
+
+  message CreateWallet {
+    string name = 1;
+  }
+  message UpdateWallet {
+    string id = 1;
+    string name = 2;
+  }
+  message DeleteWallet {
+    string id = 1;
+  }
+
+  message CreateAddress {
+    string tower_id = 1;
+    string wallet_id = 2;
+    string derivation_path = 3;
+  }
+
+  message SignEthereum {
+    string chain_id = 1;
+    string type = 2;
+    string from = 3;
+    string to = 4;
+    string value = 5;
+    uint64 gas = 6;
+    uint64 max_fee_per_gas = 7;
+    uint64 max_priority_fee_per_gas = 8;
+    uint64 nonce = 9;
+    string data = 10;
+  }
+  message SignBitcoin {
+    message Input {
+      string txid = 1;
+      uint32 vout = 2;
+      uint32 sequence = 3;
+    }
+    message Output {
+      string address = 1;
+      uint64 value = 2;
+    }
+    string version = 1;
+    repeated Input inputs = 2;
+    repeated Output outputs = 3;
+    message BitcoinTxLocktime {
+      uint64 amount = 1;
+      BitcoinTxLocktimeType type = 2;
+    }
+    BitcoinTxLocktime locktime = 4;
+    uint64 fee = 5;
+  }
+  message SignSolana {}
+  message SignTron {}
+  oneof type {
+    CreateTower create_tower = 1;
+
+    CreateUser create_user = 2;
+    UpdateUser update_user = 3;
+    DeleteUser delete_user = 4;
+
+    CreateWallet create_wallet = 5;
+    UpdateWallet update_wallet = 6;
+    DeleteWallet delete_wallet = 7;
+
+    CreateAddress create_address = 8;
+
+    SignEthereum sign_ethereum = 9;
+    SignBitcoin sign_bitcoin = 10;
+    SignSolana sign_solana = 11;
+    SignTron sign_tron = 12;
+  }
+}

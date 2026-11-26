@@ -51,7 +51,7 @@ func (r *Repository) GetRate(ctx context.Context, pair entities.Pair) (decimal.D
 
 	req.Header.Set("Content-Type", "application/json")
 	if r.cfg.Secret != nil {
-		req.Header.Set("X-CoinAPI-Key", string(*r.cfg.Secret))
+		req.Header.Set("X-Coinapi-Key", *r.cfg.Secret)
 	}
 
 	res, err := http.DefaultClient.Do(req) //nolint:gosec

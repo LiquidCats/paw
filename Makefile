@@ -7,7 +7,9 @@ ROOT_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 CONTAINER_RUNTIME ?= docker
 GO_VERSION ?= 1.27
 GOLANGCI_LINT_VERSION ?= 2.13.2
-MOCKERY_VERSION ?= 3.7
+MOCKERY_VERSION ?= 3.9
+SQLC_VERSION ?= 1.31.1
+BUF_VERSION ?= 1.75.0
 
 GO_IMAGE ?= golang:$(GO_VERSION)-alpine
 GOLANGCI_LINT_IMAGE ?= golangci/golangci-lint:v$(GOLANGCI_LINT_VERSION)-alpine
@@ -41,7 +43,7 @@ proto-lint: ## Lint protobuf definitions
 		-w /defs \
 		"$(BUF_IMAGE)" lint
 
-proto-generate: proto-clean ## Generate protobuf code
+generate-proto: proto-clean ## Generate protobuf code
 	$(CONTAINER_RUNTIME) run --rm \
 		-v "$(ROOT_DIR):/defs" \
 		-w /defs \
